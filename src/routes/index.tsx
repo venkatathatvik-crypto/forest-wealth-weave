@@ -8,9 +8,9 @@ import { DashboardPreview } from "@/components/site/DashboardPreview";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Auragold — India's Digital Distribution Backbone" },
+      { title: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { name: "description", content: "A unified commerce ecosystem connecting manufacturers, financial institutions, partners, branches and customers across India." },
-      { property: "og:title", content: "Auragold — India's Digital Distribution Backbone" },
+      { property: "og:title", content: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { property: "og:description", content: "A unified commerce ecosystem connecting manufacturers, financial institutions, partners, branches and customers across India." },
     ],
   }),
@@ -28,7 +28,7 @@ function Index() {
           <div>
             <div className="inline-flex items-center gap-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
               <span className="h-1 w-1 rounded-full bg-[color:var(--color-gold)]" />
-              Enterprise Distribution Platform
+              2+ Fortune Alliance Platform
             </div>
 
             <h1 className="mt-7 font-display text-[44px] sm:text-6xl lg:text-7xl leading-[1.02]">
@@ -38,9 +38,9 @@ function Index() {
             </h1>
 
             <p className="mt-7 max-w-xl text-base lg:text-lg text-foreground/75 leading-relaxed">
-              Connecting manufacturers, financial institutions, partners, branches and customers
-              through a single, institution-grade commerce ecosystem — engineered for
-              Bharat's next decade of growth.
+              2PlusFortuneAliances is the alliance-led commerce backbone — uniting manufacturers,
+              Fortune-grade financial institutions, partners, branches and customers under one
+              regulated, institutional-grade platform.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -54,8 +54,8 @@ function Index() {
 
             <div className="mt-14 grid grid-cols-3 max-w-lg gap-6">
               {[
-                ["10,000+", "Branches"],
-                ["₹1,200 Cr+", "Annual GMV"],
+                ["2+", "Fortune Alliances"],
+                ["10,000+", "Partner Branches"],
                 ["28 States", "Coverage"],
               ].map(([v, l]) => (
                 <div key={l}>
@@ -110,7 +110,7 @@ function Index() {
             </h2>
           </div>
           <p className="text-foreground/75 text-base lg:text-lg leading-relaxed self-end">
-            Auragold operates the connective tissue of India's distribution economy — a regulated,
+            2PlusFortuneAliances operates the connective tissue of India's distribution economy — a regulated,
             audited and observable stack designed to move products, capital and trust across
             every tier of the country.
           </p>

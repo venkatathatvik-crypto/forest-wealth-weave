@@ -3,10 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/about")({
   head: () => ({
     meta: [
-      { title: "About — Auragold Distribution Networks" },
-      { name: "description", content: "Auragold is the institutional infrastructure powering India's next-generation distribution and gold finance economy." },
-      { property: "og:title", content: "About — Auragold Distribution Networks" },
-      { property: "og:description", content: "Auragold is the institutional infrastructure powering India's next-generation distribution and gold finance economy." },
+      { title: "About — 2PlusFortuneAliances Distribution Networks" },
+      { name: "description", content: "2PlusFortuneAliances is the institutional infrastructure powering India's next-generation distribution and gold finance economy." },
+      { property: "og:title", content: "About — 2PlusFortuneAliances Distribution Networks" },
+      { property: "og:description", content: "2PlusFortuneAliances is the institutional infrastructure powering India's next-generation distribution and gold finance economy." },
     ],
   }),
   component: AboutPage,
@@ -16,13 +16,13 @@ function AboutPage() {
   return (
     <>
       <section className="mx-auto max-w-7xl px-6 lg:px-10 pt-20 pb-16">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">About Auragold</div>
+        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">About 2PlusFortuneAliances</div>
         <h1 className="font-display text-5xl lg:text-7xl mt-5 max-w-4xl leading-[1.05]">
           Engineering the <span className="text-gradient-gold">trusted layer</span> beneath India's commerce.
         </h1>
         <p className="mt-8 max-w-3xl text-lg text-foreground/75 leading-relaxed">
           Founded by veterans from financial services, distribution and enterprise software,
-          Auragold operates the regulated infrastructure that connects manufacturers to the
+          2PlusFortuneAliances operates the regulated infrastructure that connects manufacturers to the
           last branch — and the last branch to the largest financial institutions in the country.
         </p>
       </section>

@@ -3,10 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/roadmap")({
   head: () => ({
     meta: [
-      { title: "Roadmap — Auragold" },
-      { name: "description", content: "Auragold's institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
-      { property: "og:title", content: "Roadmap — Auragold" },
-      { property: "og:description", content: "Auragold's institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
+      { title: "Roadmap — 2PlusFortuneAliances" },
+      { name: "description", content: "the 2PlusFortuneAliances institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
+      { property: "og:title", content: "Roadmap — 2PlusFortuneAliances" },
+      { property: "og:description", content: "the 2PlusFortuneAliances institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
     ],
   }),
   component: RoadmapPage,
@@ -28,7 +28,7 @@ const phases = [
   {
     q: "Q1 2026",
     title: "Institutional API Layer",
-    body: "Public, SLA-bound APIs for manufacturers and financial institutions to embed Auragold rails.",
+    body: "Public, SLA-bound APIs for manufacturers and financial institutions to embed 2PlusFortuneAliances rails.",
     items: ["Open partner sandbox", "Webhook contract library", "Independent SOC 2 Type II audit"],
   },
   {

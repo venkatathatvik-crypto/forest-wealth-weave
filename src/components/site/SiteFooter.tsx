@@ -6,13 +6,13 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-12 lg:grid-cols-4">
         <div className="lg:col-span-1">
           <div className="flex items-center gap-3">
-            <span className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-xl">
-              A
+            <span className="inline-flex h-9 w-10 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-lg tracking-wider">
+              2+
             </span>
-            <span className="font-display text-xl">Auragold</span>
+            <span className="font-display text-xl">2PlusFortuneAliances</span>
           </div>
           <p className="mt-5 text-sm text-foreground/70 leading-relaxed max-w-xs">
-            India's enterprise distribution backbone — connecting manufacturers, institutions and last-mile branches.
+            A Fortune-grade alliance platform connecting manufacturers, institutions, partners and last-mile branches across India.
           </p>
         </div>
 
@@ -65,7 +65,7 @@ export function SiteFooter() {
       <div className="gold-divider opacity-40" />
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
         <p className="text-xs text-foreground/60">
-          © {new Date().getFullYear()} Auragold Distribution Networks Pvt. Ltd. All rights reserved.
+          © {new Date().getFullYear()} 2PlusFortuneAliances Distribution Networks Pvt. Ltd. All rights reserved.
         </p>
         <p className="text-xs text-foreground/60 tracking-wider uppercase">
           Registered with SEBI · ISO 27001 · RBI Compliant

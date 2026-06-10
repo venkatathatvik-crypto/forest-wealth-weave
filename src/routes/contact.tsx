@@ -4,10 +4,10 @@ import { Mail, MapPin, Phone } from "lucide-react";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Auragold" },
-      { name: "description", content: "Speak with Auragold's institutional partnerships team about distribution, gold finance and enterprise integrations." },
-      { property: "og:title", content: "Contact — Auragold" },
-      { property: "og:description", content: "Speak with Auragold's institutional partnerships team about distribution, gold finance and enterprise integrations." },
+      { title: "Contact — 2PlusFortuneAliances" },
+      { name: "description", content: "Speak with the 2PlusFortuneAliances institutional partnerships team about distribution, gold finance and enterprise integrations." },
+      { property: "og:title", content: "Contact — 2PlusFortuneAliances" },
+      { property: "og:description", content: "Speak with the 2PlusFortuneAliances institutional partnerships team about distribution, gold finance and enterprise integrations." },
     ],
   }),
   component: ContactPage,
@@ -22,7 +22,7 @@ function ContactPage() {
           Speak with our <span className="text-gradient-gold">institutional</span> team.
         </h1>
         <p className="mt-6 text-foreground/75 leading-relaxed max-w-md">
-          Auragold partners with manufacturers, banks, NBFCs and large distributors. Share a
+          2PlusFortuneAliances partners with manufacturers, banks, NBFCs and large distributors. Share a
           brief and our partnerships desk will respond within one business day.
         </p>
 

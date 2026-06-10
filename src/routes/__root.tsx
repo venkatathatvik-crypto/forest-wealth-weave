@@ -79,10 +79,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Auragold — India's Digital Distribution Backbone" },
+      { title: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { name: "description", content: "Enterprise commerce ecosystem connecting manufacturers, financial institutions, partners and branches across India." },
-      { name: "author", content: "Auragold" },
-      { property: "og:title", content: "Auragold — India's Digital Distribution Backbone" },
+      { name: "author", content: "2PlusFortuneAliances" },
+      { property: "og:title", content: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { property: "og:description", content: "Enterprise commerce ecosystem connecting manufacturers, financial institutions, partners and branches across India." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
