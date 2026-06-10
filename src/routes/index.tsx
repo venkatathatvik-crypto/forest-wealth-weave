@@ -8,9 +8,9 @@ import { DashboardPreview } from "@/components/site/DashboardPreview";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Auragold — India's Digital Distribution Backbone" },
+      { title: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { name: "description", content: "A unified commerce ecosystem connecting manufacturers, financial institutions, partners, branches and customers across India." },
-      { property: "og:title", content: "Auragold — India's Digital Distribution Backbone" },
+      { property: "og:title", content: "2PlusFortuneAliances — India's Digital Distribution Backbone" },
       { property: "og:description", content: "A unified commerce ecosystem connecting manufacturers, financial institutions, partners, branches and customers across India." },
     ],
   }),
@@ -110,7 +110,7 @@ function Index() {
             </h2>
           </div>
           <p className="text-foreground/75 text-base lg:text-lg leading-relaxed self-end">
-            Auragold operates the connective tissue of India's distribution economy — a regulated,
+            2PlusFortuneAliances operates the connective tissue of India's distribution economy — a regulated,
             audited and observable stack designed to move products, capital and trust across
             every tier of the country.
           </p>

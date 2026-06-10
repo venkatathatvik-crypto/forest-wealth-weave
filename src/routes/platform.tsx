@@ -5,10 +5,10 @@ import { Box, Coins, FileCheck2, LayoutDashboard, Users2, Workflow } from "lucid
 export const Route = createFileRoute("/platform")({
   head: () => ({
     meta: [
-      { title: "Platform — Auragold Distribution OS" },
-      { name: "description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — Auragold's institutional commerce platform." },
-      { property: "og:title", content: "Platform — Auragold Distribution OS" },
-      { property: "og:description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — Auragold's institutional commerce platform." },
+      { title: "Platform — 2PlusFortuneAliances Distribution OS" },
+      { name: "description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — 2PlusFortuneAliances's institutional commerce platform." },
+      { property: "og:title", content: "Platform — 2PlusFortuneAliances Distribution OS" },
+      { property: "og:description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — 2PlusFortuneAliances's institutional commerce platform." },
     ],
   }),
   component: PlatformPage,
@@ -32,7 +32,7 @@ function PlatformPage() {
           One operating layer for <span className="text-gradient-gold">India's distribution economy</span>.
         </h1>
         <p className="mt-7 max-w-3xl text-lg text-foreground/75 leading-relaxed">
-          Auragold is a modular, institutional-grade platform. Deploy individual modules or
+          2PlusFortuneAliances is a modular, institutional-grade platform. Deploy individual modules or
           operate the full stack — every layer is audited, observable and ready for regulated scale.
         </p>
       </section>
@@ -55,7 +55,7 @@ function PlatformPage() {
             Boardroom-grade telemetry, across every branch.
           </h2>
           <p className="mt-5 text-foreground/75 leading-relaxed">
-            The Auragold console unifies GMV, settlement, partner performance and risk metrics
+            The 2PlusFortuneAliances console unifies GMV, settlement, partner performance and risk metrics
             into a single, defensible view of the network.
           </p>
           <Link to="/contact" className="btn-gold inline-flex mt-7 rounded-sm px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em]">

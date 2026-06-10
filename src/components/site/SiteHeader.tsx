@@ -36,7 +36,7 @@ export function SiteHeader() {
             A
           </span>
           <div className="flex flex-col leading-none">
-            <span className="font-display text-xl tracking-wide">Auragold</span>
+            <span className="font-display text-xl tracking-wide">2PlusFortuneAliances</span>
             <span className="text-[10px] uppercase tracking-[0.25em] text-gold/80">
               Distribution Network
             </span>

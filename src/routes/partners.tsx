@@ -3,10 +3,10 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
-      { title: "Partners — Auragold Distribution Network" },
-      { name: "description", content: "Manufacturers, financial institutions, distributors and branches building India's distribution backbone with Auragold." },
-      { property: "og:title", content: "Partners — Auragold Distribution Network" },
-      { property: "og:description", content: "Manufacturers, financial institutions, distributors and branches building India's distribution backbone with Auragold." },
+      { title: "Partners — 2PlusFortuneAliances Distribution Network" },
+      { name: "description", content: "Manufacturers, financial institutions, distributors and branches building India's distribution backbone with 2PlusFortuneAliances." },
+      { property: "og:title", content: "Partners — 2PlusFortuneAliances Distribution Network" },
+      { property: "og:description", content: "Manufacturers, financial institutions, distributors and branches building India's distribution backbone with 2PlusFortuneAliances." },
     ],
   }),
   component: PartnersPage,
@@ -71,7 +71,7 @@ function PartnersPage() {
       <section className="mx-auto max-w-7xl px-6 lg:px-10 pb-24">
         <div className="glass-card rounded-md p-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <h2 className="font-display text-3xl max-w-xl leading-tight">
-            Become an Auragold institutional partner.
+            Become an 2PlusFortuneAliances institutional partner.
           </h2>
           <Link to="/contact" className="btn-gold rounded-sm px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em]">
             Begin Partnership Review
