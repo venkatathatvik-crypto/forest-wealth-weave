@@ -6,9 +6,9 @@ export const Route = createFileRoute("/platform")({
   head: () => ({
     meta: [
       { title: "Platform — 2PlusFortuneAliances Distribution OS" },
-      { name: "description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — 2PlusFortuneAliances's institutional commerce platform." },
+      { name: "description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — the 2PlusFortuneAliances institutional commerce platform." },
       { property: "og:title", content: "Platform — 2PlusFortuneAliances Distribution OS" },
-      { property: "og:description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — 2PlusFortuneAliances's institutional commerce platform." },
+      { property: "og:description", content: "Distribution OS, Gold EMI module, partner console and analytics suite — the 2PlusFortuneAliances institutional commerce platform." },
     ],
   }),
   component: PlatformPage,

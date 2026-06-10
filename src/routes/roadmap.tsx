@@ -4,9 +4,9 @@ export const Route = createFileRoute("/roadmap")({
   head: () => ({
     meta: [
       { title: "Roadmap — 2PlusFortuneAliances" },
-      { name: "description", content: "2PlusFortuneAliances's institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
+      { name: "description", content: "the 2PlusFortuneAliances institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
       { property: "og:title", content: "Roadmap — 2PlusFortuneAliances" },
-      { property: "og:description", content: "2PlusFortuneAliances's institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
+      { property: "og:description", content: "the 2PlusFortuneAliances institutional roadmap across distribution, embedded finance and regulatory infrastructure." },
     ],
   }),
   component: RoadmapPage,

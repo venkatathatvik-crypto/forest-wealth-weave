@@ -5,9 +5,9 @@ export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — 2PlusFortuneAliances" },
-      { name: "description", content: "Speak with 2PlusFortuneAliances's institutional partnerships team about distribution, gold finance and enterprise integrations." },
+      { name: "description", content: "Speak with the 2PlusFortuneAliances institutional partnerships team about distribution, gold finance and enterprise integrations." },
       { property: "og:title", content: "Contact — 2PlusFortuneAliances" },
-      { property: "og:description", content: "Speak with 2PlusFortuneAliances's institutional partnerships team about distribution, gold finance and enterprise integrations." },
+      { property: "og:description", content: "Speak with the 2PlusFortuneAliances institutional partnerships team about distribution, gold finance and enterprise integrations." },
     ],
   }),
   component: ContactPage,

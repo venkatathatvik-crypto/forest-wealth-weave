@@ -71,7 +71,7 @@ function PartnersPage() {
       <section className="mx-auto max-w-7xl px-6 lg:px-10 pb-24">
         <div className="glass-card rounded-md p-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <h2 className="font-display text-3xl max-w-xl leading-tight">
-            Become an 2PlusFortuneAliances institutional partner.
+            Become a 2PlusFortuneAliances institutional partner.
           </h2>
           <Link to="/contact" className="btn-gold rounded-sm px-6 py-3 text-xs font-semibold uppercase tracking-[0.22em]">
             Begin Partnership Review
