@@ -32,13 +32,13 @@ export function SiteHeader() {
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-xl">
-            A
+          <span className="inline-flex h-9 w-10 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-lg tracking-wider">
+            2+
           </span>
           <div className="flex flex-col leading-none">
             <span className="font-display text-xl tracking-wide">2PlusFortuneAliances</span>
             <span className="text-[10px] uppercase tracking-[0.25em] text-gold/80">
-              Distribution Network
+              Fortune Alliance Platform
             </span>
           </div>
         </Link>
