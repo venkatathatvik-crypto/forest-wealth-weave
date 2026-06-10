@@ -28,7 +28,7 @@ function Index() {
           <div>
             <div className="inline-flex items-center gap-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/60 px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
               <span className="h-1 w-1 rounded-full bg-[color:var(--color-gold)]" />
-              Enterprise Distribution Platform
+              2+ Fortune Alliance Platform
             </div>
 
             <h1 className="mt-7 font-display text-[44px] sm:text-6xl lg:text-7xl leading-[1.02]">
@@ -38,9 +38,9 @@ function Index() {
             </h1>
 
             <p className="mt-7 max-w-xl text-base lg:text-lg text-foreground/75 leading-relaxed">
-              Connecting manufacturers, financial institutions, partners, branches and customers
-              through a single, institution-grade commerce ecosystem — engineered for
-              Bharat's next decade of growth.
+              2PlusFortuneAliances is the alliance-led commerce backbone — uniting manufacturers,
+              Fortune-grade financial institutions, partners, branches and customers under one
+              regulated, institutional-grade platform.
             </p>
 
             <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -54,8 +54,8 @@ function Index() {
 
             <div className="mt-14 grid grid-cols-3 max-w-lg gap-6">
               {[
-                ["10,000+", "Branches"],
-                ["₹1,200 Cr+", "Annual GMV"],
+                ["2+", "Fortune Alliances"],
+                ["10,000+", "Partner Branches"],
                 ["28 States", "Coverage"],
               ].map(([v, l]) => (
                 <div key={l}>
