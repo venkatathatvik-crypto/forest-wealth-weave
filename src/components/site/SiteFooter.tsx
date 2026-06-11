@@ -1,16 +1,18 @@
 import { Link } from "@tanstack/react-router";
+import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 
 export function SiteFooter() {
   return (
     <footer className="mt-24 border-t border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/70">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-16 grid gap-12 lg:grid-cols-4">
         <div className="lg:col-span-1">
-          <div className="flex items-center gap-3">
-            <span className="inline-flex h-9 w-10 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-lg tracking-wider">
-              2+
-            </span>
-            <span className="font-display text-xl">2PlusFortuneAliances</span>
-          </div>
+          <img
+            src={logoAsset.url}
+            alt="Fortune Alliances"
+            className="h-14 w-auto object-contain"
+            loading="lazy"
+            decoding="async"
+          />
           <p className="mt-5 text-sm text-foreground/70 leading-relaxed max-w-xs">
             A Fortune-grade alliance platform connecting manufacturers, institutions, partners and last-mile branches across India.
           </p>

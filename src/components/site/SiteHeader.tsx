@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
+import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 
 const nav = [
   { to: "/", label: "Home" },
@@ -31,16 +32,14 @@ export function SiteHeader() {
       }`}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-10 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3 group">
-          <span className="inline-flex h-9 w-10 items-center justify-center rounded-sm border border-[color:var(--color-gold)]/60 text-gold font-display text-lg tracking-wider">
-            2+
-          </span>
-          <div className="flex flex-col leading-none">
-            <span className="font-display text-xl tracking-wide">2PlusFortuneAliances</span>
-            <span className="text-[10px] uppercase tracking-[0.25em] text-gold/80">
-              Fortune Alliance Platform
-            </span>
-          </div>
+        <Link to="/" className="flex items-center group" aria-label="Fortune Alliances — Home">
+          <img
+            src={logoAsset.url}
+            alt="Fortune Alliances"
+            className="h-12 lg:h-14 w-auto object-contain"
+            loading="eager"
+            decoding="async"
+          />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-9">

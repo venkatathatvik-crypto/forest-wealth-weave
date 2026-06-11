@@ -71,8 +71,8 @@
 :root {
   --radius: 0.625rem;
   /* Brand tokens — Deep Emerald + Gold */
-  --emerald-deep: oklch(0.28 0.06 160);     /* #0B3D2E vibe */
-  --emerald-forest: oklch(0.23 0.05 160);   /* #123524 vibe */
+  --emerald-deep: oklch(0.24 0.035 195);    /* #05282C — matches logo bg */
+  --emerald-forest: oklch(0.20 0.030 195);  /* deeper forest variant */
   --gold: oklch(0.78 0.13 85);              /* #D4AF37 vibe */
   --gold-soft: oklch(0.85 0.09 85);
   --ivory: oklch(0.97 0.01 95);
