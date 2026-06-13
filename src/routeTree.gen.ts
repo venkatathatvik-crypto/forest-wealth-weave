@@ -11,9 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlatformRouteImport } from './routes/platform'
 import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as OrdersRouteImport } from './routes/orders'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as GoldProductsRouteImport } from './routes/gold-products'
 import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BranchesRouteImport } from './routes/branches'
@@ -33,6 +36,11 @@ const RoadmapRoute = RoadmapRouteImport.update({
   path: '/roadmap',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlatformRoute = PlatformRouteImport.update({
   id: '/platform',
   path: '/platform',
@@ -43,9 +51,19 @@ const PartnersRoute = PartnersRouteImport.update({
   path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoldProductsRoute = GoldProductsRouteImport.update({
+  id: '/gold-products',
+  path: '/gold-products',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CustomersRoute = CustomersRouteImport.update({
@@ -95,9 +113,12 @@ export interface FileRoutesByFullPath {
   '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
   '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -110,9 +131,12 @@ export interface FileRoutesByTo {
   '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
   '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -126,9 +150,12 @@ export interface FileRoutesById {
   '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
   '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
@@ -143,9 +170,12 @@ export interface FileRouteTypes {
     | '/branches'
     | '/contact'
     | '/customers'
+    | '/gold-products'
     | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
     | '/dashboard/admin'
@@ -158,9 +188,12 @@ export interface FileRouteTypes {
     | '/branches'
     | '/contact'
     | '/customers'
+    | '/gold-products'
     | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
     | '/dashboard/admin'
@@ -173,9 +206,12 @@ export interface FileRouteTypes {
     | '/branches'
     | '/contact'
     | '/customers'
+    | '/gold-products'
     | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
     | '/dashboard/admin'
@@ -189,9 +225,12 @@ export interface RootRouteChildren {
   BranchesRoute: typeof BranchesRoute
   ContactRoute: typeof ContactRoute
   CustomersRoute: typeof CustomersRoute
+  GoldProductsRoute: typeof GoldProductsRoute
   LoginRoute: typeof LoginRoute
+  OrdersRoute: typeof OrdersRoute
   PartnersRoute: typeof PartnersRoute
   PlatformRoute: typeof PlatformRoute
+  ReportsRoute: typeof ReportsRoute
   RoadmapRoute: typeof RoadmapRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DashboardAdminRoute: typeof DashboardAdminRoute
@@ -215,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/platform': {
       id: '/platform'
       path: '/platform'
@@ -229,11 +275,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gold-products': {
+      id: '/gold-products'
+      path: '/gold-products'
+      fullPath: '/gold-products'
+      preLoaderRoute: typeof GoldProductsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/customers': {
@@ -301,9 +361,12 @@ const rootRouteChildren: RootRouteChildren = {
   BranchesRoute: BranchesRoute,
   ContactRoute: ContactRoute,
   CustomersRoute: CustomersRoute,
+  GoldProductsRoute: GoldProductsRoute,
   LoginRoute: LoginRoute,
+  OrdersRoute: OrdersRoute,
   PartnersRoute: PartnersRoute,
   PlatformRoute: PlatformRoute,
+  ReportsRoute: ReportsRoute,
   RoadmapRoute: RoadmapRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DashboardAdminRoute: DashboardAdminRoute,
