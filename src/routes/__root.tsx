@@ -131,7 +131,6 @@ function RootComponent() {
     pathname.startsWith("/gold-products") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/reports") ||
-    pathname.startsWith("/partners") ||
     pathname.startsWith("/branches") ||
     pathname === "/login";
 

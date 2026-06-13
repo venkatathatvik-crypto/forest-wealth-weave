@@ -3,7 +3,7 @@ import { useAuth, type Role } from "@/lib/mock/auth";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 import {
   LayoutDashboard, Users, Coins, ShoppingCart, FileBarChart2,
-  Handshake, Building2, LogOut, Bell, Search,
+  Building2, LogOut, Bell, Search,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -17,7 +17,6 @@ const NAV: NavItem[] = [
   { to: "/gold-products", label: "Gold Products", icon: Coins, roles: ["admin", "partner", "branch"] },
   { to: "/orders", label: "Orders", icon: ShoppingCart, roles: ["admin", "partner", "branch"] },
   { to: "/reports", label: "Reports", icon: FileBarChart2, roles: ["admin", "partner"] },
-  { to: "/partners", label: "Partners", icon: Handshake, roles: ["admin"] },
   { to: "/branches", label: "Branches", icon: Building2, roles: ["admin", "partner"] },
 ];
 

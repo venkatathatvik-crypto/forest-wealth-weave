@@ -1,14 +1,15 @@
 const layers = [
-  { label: "Manufacturers", sub: "OEMs · Brands", count: 1 },
-  { label: "Fortune Alliances", sub: "2+ Financial Institutions", count: 2 },
-  { label: "Partners", sub: "Distributors · DSAs", count: 3 },
-  { label: "Branches", sub: "10,000+ Touchpoints", count: 4 },
-  { label: "Customers", sub: "Bharat · Tier 2–6", count: 5 },
+  { label: "Manufacturers / OEMs", sub: "Production · Packaging", count: 1 },
+  { label: "Aggregators", sub: "2+FAPL · Warehousing", count: 2 },
+  { label: "Financial Institutions", sub: "MFI · NBFC · Cooperatives", count: 3 },
+  { label: "Partners", sub: "Channel & Strategic", count: 3 },
+  { label: "Branches", sub: "Last-Mile Touchpoints", count: 4 },
+  { label: "Customers", sub: "Rural · Semi-Urban · Urban", count: 5 },
 ];
 
 export function EcosystemNetwork() {
   const width = 560;
-  const height = 520;
+  const height = 560;
   const rowY = (i: number) => 60 + i * ((height - 120) / (layers.length - 1));
 
   return (
@@ -21,12 +22,12 @@ export function EcosystemNetwork() {
       >
         <defs>
           <linearGradient id="goldLine" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#F4D27A" stopOpacity="0.0" />
-            <stop offset="50%" stopColor="#D4AF37" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#8C6B1F" stopOpacity="0.0" />
+            <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.0" />
+            <stop offset="50%" stopColor="#B8902C" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#D4AF37" stopOpacity="0.0" />
           </linearGradient>
           <radialGradient id="nodeGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#F4D27A" stopOpacity="0.55" />
+            <stop offset="0%" stopColor="#F4D27A" stopOpacity="0.45" />
             <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
           </radialGradient>
           <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
@@ -54,7 +55,7 @@ export function EcosystemNetwork() {
                 x2={x2}
                 y2={y2}
                 stroke="url(#goldLine)"
-                strokeWidth="1"
+                strokeWidth="1.2"
                 strokeDasharray="3 6"
                 style={{
                   animation: `dash-flow ${6 + ((a + b) % 4)}s linear infinite`,
@@ -76,11 +77,11 @@ export function EcosystemNetwork() {
                   cx={x}
                   cy={y}
                   r={9}
-                  fill="#123524"
+                  fill="#0B3D2E"
                   stroke="#D4AF37"
-                  strokeWidth="1.2"
+                  strokeWidth="1.4"
                 />
-                <circle cx={x} cy={y} r={3.5} fill="#F4D27A" />
+                <circle cx={x} cy={y} r={3.5} fill="#D4AF37" />
               </g>
             );
           });
@@ -95,7 +96,7 @@ export function EcosystemNetwork() {
                 x={width - 8}
                 y={y - 4}
                 textAnchor="end"
-                fill="#F4E9C9"
+                fill="#0B3D2E"
                 style={{ font: "500 13px Inter, sans-serif", letterSpacing: "0.08em", textTransform: "uppercase" }}
               >
                 {layer.label}
@@ -104,8 +105,8 @@ export function EcosystemNetwork() {
                 x={width - 8}
                 y={y + 12}
                 textAnchor="end"
-                fill="#D4AF37"
-                opacity="0.75"
+                fill="#B8902C"
+                opacity="0.95"
                 style={{ font: "400 11px Inter, sans-serif" }}
               >
                 {layer.sub}
