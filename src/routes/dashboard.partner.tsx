@@ -3,6 +3,31 @@ import { AppShell } from "@/components/dashboard/AppShell";
 import { StatCard } from "@/components/dashboard/widgets";
 import { Building2, ShoppingCart, IndianRupee, Activity } from "lucide-react";
 import { branches, orders, inr } from "@/lib/mock/data";
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+
+const distributionSeries = [
+  { month: "Jul", primary: 412, secondary: 268, branches: 184 },
+  { month: "Aug", primary: 468, secondary: 295, branches: 201 },
+  { month: "Sep", primary: 521, secondary: 332, branches: 224 },
+  { month: "Oct", primary: 498, secondary: 358, branches: 246 },
+  { month: "Nov", primary: 574, secondary: 391, branches: 271 },
+  { month: "Dec", primary: 632, secondary: 422, branches: 298 },
+  { month: "Jan", primary: 689, secondary: 461, branches: 325 },
+  { month: "Feb", primary: 712, secondary: 489, branches: 348 },
+  { month: "Mar", primary: 781, secondary: 524, branches: 376 },
+  { month: "Apr", primary: 824, secondary: 561, branches: 402 },
+  { month: "May", primary: 902, secondary: 598, branches: 431 },
+  { month: "Jun", primary: 968, secondary: 642, branches: 458 },
+];
 
 export const Route = createFileRoute("/dashboard/partner")({
   head: () => ({ meta: [{ title: "Partner Console — 2PlusFortuneAliances" }] }),
