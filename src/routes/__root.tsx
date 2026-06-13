@@ -13,6 +13,8 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "../components/site/SiteHeader";
 import { SiteFooter } from "../components/site/SiteFooter";
+import { AuthProvider } from "../lib/mock/auth";
+import { useRouterState } from "@tanstack/react-router";
 
 function NotFoundComponent() {
   return (
@@ -122,16 +124,32 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isApp =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/customers") ||
+    pathname.startsWith("/gold-products") ||
+    pathname.startsWith("/orders") ||
+    pathname.startsWith("/reports") ||
+    pathname.startsWith("/partners") ||
+    pathname.startsWith("/branches") ||
+    pathname === "/login";
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative min-h-screen flex flex-col">
-        <SiteHeader />
-        <main className="flex-1">
+      <AuthProvider>
+        {isApp ? (
           <Outlet />
-        </main>
-        <SiteFooter />
-      </div>
+        ) : (
+          <div className="relative min-h-screen flex flex-col">
+            <SiteHeader />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <SiteFooter />
+          </div>
+        )}
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

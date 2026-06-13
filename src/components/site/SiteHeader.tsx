@@ -57,7 +57,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <Link to="/contact" className="btn-ghost-gold px-4 py-2 rounded-sm text-xs uppercase tracking-[0.18em]">
+          <Link to="/login" className="btn-ghost-gold px-4 py-2 rounded-sm text-xs uppercase tracking-[0.18em]">
             Partner Login
           </Link>
           <Link to="/contact" className="btn-gold px-4 py-2 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold">

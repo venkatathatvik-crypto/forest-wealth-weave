@@ -11,11 +11,20 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
+import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlatformRouteImport } from './routes/platform'
 import { Route as PartnersRouteImport } from './routes/partners'
+import { Route as OrdersRouteImport } from './routes/orders'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as GoldProductsRouteImport } from './routes/gold-products'
+import { Route as CustomersRouteImport } from './routes/customers'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as BranchesRouteImport } from './routes/branches'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardPartnerRouteImport } from './routes/dashboard.partner'
+import { Route as DashboardBranchRouteImport } from './routes/dashboard.branch'
+import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -25,6 +34,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const RoadmapRoute = RoadmapRouteImport.update({
   id: '/roadmap',
   path: '/roadmap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReportsRoute = ReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlatformRoute = PlatformRouteImport.update({
@@ -37,9 +51,34 @@ const PartnersRoute = PartnersRouteImport.update({
   path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersRoute = OrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GoldProductsRoute = GoldProductsRouteImport.update({
+  id: '/gold-products',
+  path: '/gold-products',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CustomersRoute = CustomersRouteImport.update({
+  id: '/customers',
+  path: '/customers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BranchesRoute = BranchesRouteImport.update({
+  id: '/branches',
+  path: '/branches',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -52,73 +91,151 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardPartnerRoute = DashboardPartnerRouteImport.update({
+  id: '/dashboard/partner',
+  path: '/dashboard/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardBranchRoute = DashboardBranchRouteImport.update({
+  id: '/dashboard/branch',
+  path: '/dashboard/branch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardAdminRoute = DashboardAdminRouteImport.update({
+  id: '/dashboard/admin',
+  path: '/dashboard/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
+  '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
+  '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
+  '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
+  '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/branches': typeof BranchesRoute
   '/contact': typeof ContactRoute
+  '/customers': typeof CustomersRoute
+  '/gold-products': typeof GoldProductsRoute
+  '/login': typeof LoginRoute
+  '/orders': typeof OrdersRoute
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
+  '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/branches'
     | '/contact'
+    | '/customers'
+    | '/gold-products'
+    | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
+    | '/branches'
     | '/contact'
+    | '/customers'
+    | '/gold-products'
+    | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/branches'
     | '/contact'
+    | '/customers'
+    | '/gold-products'
+    | '/login'
+    | '/orders'
     | '/partners'
     | '/platform'
+    | '/reports'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  BranchesRoute: typeof BranchesRoute
   ContactRoute: typeof ContactRoute
+  CustomersRoute: typeof CustomersRoute
+  GoldProductsRoute: typeof GoldProductsRoute
+  LoginRoute: typeof LoginRoute
+  OrdersRoute: typeof OrdersRoute
   PartnersRoute: typeof PartnersRoute
   PlatformRoute: typeof PlatformRoute
+  ReportsRoute: typeof ReportsRoute
   RoadmapRoute: typeof RoadmapRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardBranchRoute: typeof DashboardBranchRoute
+  DashboardPartnerRoute: typeof DashboardPartnerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -137,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RoadmapRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reports': {
+      id: '/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof ReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/platform': {
       id: '/platform'
       path: '/platform'
@@ -151,11 +275,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders': {
+      id: '/orders'
+      path: '/orders'
+      fullPath: '/orders'
+      preLoaderRoute: typeof OrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gold-products': {
+      id: '/gold-products'
+      path: '/gold-products'
+      fullPath: '/gold-products'
+      preLoaderRoute: typeof GoldProductsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/customers': {
+      id: '/customers'
+      path: '/customers'
+      fullPath: '/customers'
+      preLoaderRoute: typeof CustomersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/branches': {
+      id: '/branches'
+      path: '/branches'
+      fullPath: '/branches'
+      preLoaderRoute: typeof BranchesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -172,17 +331,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/partner': {
+      id: '/dashboard/partner'
+      path: '/dashboard/partner'
+      fullPath: '/dashboard/partner'
+      preLoaderRoute: typeof DashboardPartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/branch': {
+      id: '/dashboard/branch'
+      path: '/dashboard/branch'
+      fullPath: '/dashboard/branch'
+      preLoaderRoute: typeof DashboardBranchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/dashboard/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  BranchesRoute: BranchesRoute,
   ContactRoute: ContactRoute,
+  CustomersRoute: CustomersRoute,
+  GoldProductsRoute: GoldProductsRoute,
+  LoginRoute: LoginRoute,
+  OrdersRoute: OrdersRoute,
   PartnersRoute: PartnersRoute,
   PlatformRoute: PlatformRoute,
+  ReportsRoute: ReportsRoute,
   RoadmapRoute: RoadmapRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  DashboardAdminRoute: DashboardAdminRoute,
+  DashboardBranchRoute: DashboardBranchRoute,
+  DashboardPartnerRoute: DashboardPartnerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
