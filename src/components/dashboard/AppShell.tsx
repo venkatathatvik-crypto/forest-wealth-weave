@@ -3,7 +3,7 @@ import { useAuth, type Role } from "@/lib/mock/auth";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 import {
   LayoutDashboard, Users, Coins, ShoppingCart, FileBarChart2,
-  Handshake, Building2, LogOut, Bell, Search,
+  Building2, LogOut, Bell, Search,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
