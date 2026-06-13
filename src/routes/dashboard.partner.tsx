@@ -45,6 +45,57 @@ function PartnerDashboard() {
         <StatCard label="Performance Score" value="94.8" delta="Tier · Platinum" icon={<Activity size={16} />} />
       </div>
 
+      <div className="glass-card rounded-md p-6 mt-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className="text-[10px] uppercase tracking-[0.28em] text-gold/80">Distribution Volume</div>
+            <h3 className="font-display text-xl mt-1">Gold throughput across the network · last 12 months</h3>
+            <p className="text-xs text-foreground/55 mt-1">Indexed kilograms dispatched through primary alliances, secondary partners and branch counters.</p>
+          </div>
+          <div className="flex items-center gap-4 text-[11px] text-foreground/70">
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#D4AF37]" /> Primary Alliances</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#8C6B1F]" /> Secondary Partners</span>
+            <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#5BA88A]" /> Branches</span>
+          </div>
+        </div>
+        <div className="h-72 mt-5 -ml-2">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={distributionSeries} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="gPrimary" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#D4AF37" stopOpacity={0.55} />
+                  <stop offset="100%" stopColor="#D4AF37" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gSecondary" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#8C6B1F" stopOpacity={0.45} />
+                  <stop offset="100%" stopColor="#8C6B1F" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gBranches" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#5BA88A" stopOpacity={0.4} />
+                  <stop offset="100%" stopColor="#5BA88A" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid stroke="rgba(255,255,255,0.06)" vertical={false} />
+              <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.55)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }} axisLine={false} tickLine={false} width={40} />
+              <Tooltip
+                contentStyle={{
+                  background: "rgba(8,32,30,0.95)",
+                  border: "1px solid rgba(212,175,55,0.35)",
+                  borderRadius: 4,
+                  fontSize: 12,
+                }}
+                labelStyle={{ color: "#D4AF37", fontWeight: 600 }}
+                formatter={(v: number) => [`${v} kg`, ""]}
+              />
+              <Area type="monotone" dataKey="primary" name="Primary Alliances" stroke="#D4AF37" strokeWidth={2} fill="url(#gPrimary)" />
+              <Area type="monotone" dataKey="secondary" name="Secondary Partners" stroke="#8C6B1F" strokeWidth={2} fill="url(#gSecondary)" />
+              <Area type="monotone" dataKey="branches" name="Branches" stroke="#5BA88A" strokeWidth={2} fill="url(#gBranches)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
       <div className="grid lg:grid-cols-3 gap-5 mt-6">
         <div className="lg:col-span-2 glass-card rounded-md p-6">
           <div className="text-[10px] uppercase tracking-[0.28em] text-gold/80">Performance Metrics</div>
