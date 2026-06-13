@@ -17,6 +17,9 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardPartnerRouteImport } from './routes/dashboard.partner'
+import { Route as DashboardBranchRouteImport } from './routes/dashboard.branch'
+import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -58,6 +61,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardPartnerRoute = DashboardPartnerRouteImport.update({
+  id: '/dashboard/partner',
+  path: '/dashboard/partner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardBranchRoute = DashboardBranchRouteImport.update({
+  id: '/dashboard/branch',
+  path: '/dashboard/branch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardAdminRoute = DashboardAdminRouteImport.update({
+  id: '/dashboard/admin',
+  path: '/dashboard/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +86,9 @@ export interface FileRoutesByFullPath {
   '/platform': typeof PlatformRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +99,9 @@ export interface FileRoutesByTo {
   '/platform': typeof PlatformRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +113,9 @@ export interface FileRoutesById {
   '/platform': typeof PlatformRoute
   '/roadmap': typeof RoadmapRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/dashboard/admin': typeof DashboardAdminRoute
+  '/dashboard/branch': typeof DashboardBranchRoute
+  '/dashboard/partner': typeof DashboardPartnerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +128,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +141,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   id:
     | '__root__'
     | '/'
@@ -121,6 +154,9 @@ export interface FileRouteTypes {
     | '/platform'
     | '/roadmap'
     | '/sitemap.xml'
+    | '/dashboard/admin'
+    | '/dashboard/branch'
+    | '/dashboard/partner'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +168,9 @@ export interface RootRouteChildren {
   PlatformRoute: typeof PlatformRoute
   RoadmapRoute: typeof RoadmapRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  DashboardAdminRoute: typeof DashboardAdminRoute
+  DashboardBranchRoute: typeof DashboardBranchRoute
+  DashboardPartnerRoute: typeof DashboardPartnerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +231,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/partner': {
+      id: '/dashboard/partner'
+      path: '/dashboard/partner'
+      fullPath: '/dashboard/partner'
+      preLoaderRoute: typeof DashboardPartnerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/branch': {
+      id: '/dashboard/branch'
+      path: '/dashboard/branch'
+      fullPath: '/dashboard/branch'
+      preLoaderRoute: typeof DashboardBranchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/admin': {
+      id: '/dashboard/admin'
+      path: '/dashboard/admin'
+      fullPath: '/dashboard/admin'
+      preLoaderRoute: typeof DashboardAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +264,9 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformRoute: PlatformRoute,
   RoadmapRoute: RoadmapRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  DashboardAdminRoute: DashboardAdminRoute,
+  DashboardBranchRoute: DashboardBranchRoute,
+  DashboardPartnerRoute: DashboardPartnerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
