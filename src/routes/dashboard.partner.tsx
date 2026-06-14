@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatCard } from "@/components/dashboard/widgets";
 import { Building2, ShoppingCart, IndianRupee, Activity } from "lucide-react";
-import { branches, orders, inr } from "@/lib/mock/data";
+import { branches, orders } from "@/lib/mock/data";
 import {
   ResponsiveContainer,
   AreaChart,
