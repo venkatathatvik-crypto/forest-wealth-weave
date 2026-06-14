@@ -1,16 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatusPill, PageToolbar } from "@/components/dashboard/widgets";
 import { orders as seed, inr } from "@/lib/mock/data";
-import { Search } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/orders")({
   head: () => ({ meta: [{ title: "Orders — 2PlusFortuneAliances" }] }),
   component: OrdersPage,
 });
 
-const STAGES = ["Placed", "Processing", "Dispatched", "Delivered"] as const;
+const STAGES = ["Pending", "Processing", "Dispatched", "Delivered"] as const;
 
 function OrdersPage() {
   const [q, setQ] = useState("");
@@ -28,8 +28,12 @@ function OrdersPage() {
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search order, customer, product…" className="bg-transparent outline-none text-sm flex-1" />
         </div>
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 px-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 text-sm">
-          {["All", "Placed", "Processing", "Dispatched", "Delivered", "Cancelled"].map((s) => <option key={s}>{s}</option>)}
+          {["All", "Pending", "Processing", "Dispatched", "Delivered", "Cancelled"].map((s) => <option key={s}>{s}</option>)}
         </select>
+        <div className="flex-1" />
+        <Link to="/orders/new" className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2">
+          <Plus size={14} /> New Order
+        </Link>
       </PageToolbar>
 
       <div className="space-y-3">

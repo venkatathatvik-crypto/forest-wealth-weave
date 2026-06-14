@@ -63,7 +63,7 @@ export const goldProducts: GoldProduct[] = [
 export type Order = {
   id: string; customer: string; branch: string; product: string;
   qty: number; weight: number; amount: number;
-  status: "Placed" | "Processing" | "Dispatched" | "Delivered" | "Cancelled";
+  status: "Pending" | "Processing" | "Dispatched" | "Delivered" | "Cancelled";
   date: string;
 };
 
@@ -71,7 +71,7 @@ export const orders: Order[] = [
   { id: "ORD-220114", customer: "Aarav Mehta", branch: "Andheri East Hub", product: "Heritage 5g Coin", qty: 2, weight: 10, amount: 75620, status: "Delivered", date: "2026-06-08" },
   { id: "ORD-220115", customer: "Ishita Reddy", branch: "Banjara Hills Desk", product: "Imperial 10g Bar", qty: 1, weight: 10, amount: 75021, status: "Dispatched", date: "2026-06-09" },
   { id: "ORD-220116", customer: "Rohan Kapoor", branch: "Sector 18 Outlet", product: "Sovereign 1g Coin", qty: 8, weight: 8, amount: 60824, status: "Processing", date: "2026-06-10" },
-  { id: "ORD-220117", customer: "Meera Iyer", branch: "Indiranagar Centre", product: "Vault 50g Bar", qty: 1, weight: 50, amount: 372948, status: "Placed", date: "2026-06-11" },
+  { id: "ORD-220117", customer: "Meera Iyer", branch: "Indiranagar Centre", product: "Vault 50g Bar", qty: 1, weight: 50, amount: 372948, status: "Pending", date: "2026-06-11" },
   { id: "ORD-220118", customer: "Sanya Patil", branch: "Koregaon Park Branch", product: "Lakshmi 8g Coin", qty: 1, weight: 8, amount: 61234, status: "Delivered", date: "2026-06-07" },
   { id: "ORD-220119", customer: "Dev Kulkarni", branch: "MG Road Counter", product: "Heritage 5g Coin", qty: 1, weight: 5, amount: 37810, status: "Cancelled", date: "2026-06-04" },
   { id: "ORD-220120", customer: "Arjun Bose", branch: "Salt Lake Sector V", product: "Sovereign 1g Coin", qty: 3, weight: 3, amount: 22810, status: "Processing", date: "2026-06-11" },

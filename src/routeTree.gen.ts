@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlatformRouteImport } from './routes/platform'
@@ -22,6 +23,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BranchesRouteImport } from './routes/branches'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OrdersNewRouteImport } from './routes/orders.new'
 import { Route as DashboardPartnerRouteImport } from './routes/dashboard.partner'
 import { Route as DashboardBranchRouteImport } from './routes/dashboard.branch'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
@@ -29,6 +31,11 @@ import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoadmapRoute = RoadmapRouteImport.update({
@@ -91,6 +98,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OrdersNewRoute = OrdersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => OrdersRoute,
+} as any)
 const DashboardPartnerRoute = DashboardPartnerRouteImport.update({
   id: '/dashboard/partner',
   path: '/dashboard/partner',
@@ -115,15 +127,17 @@ export interface FileRoutesByFullPath {
   '/customers': typeof CustomersRoute
   '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/partner': typeof DashboardPartnerRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -133,15 +147,17 @@ export interface FileRoutesByTo {
   '/customers': typeof CustomersRoute
   '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/partner': typeof DashboardPartnerRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,15 +168,17 @@ export interface FileRoutesById {
   '/customers': typeof CustomersRoute
   '/gold-products': typeof GoldProductsRoute
   '/login': typeof LoginRoute
-  '/orders': typeof OrdersRoute
+  '/orders': typeof OrdersRouteWithChildren
   '/partners': typeof PartnersRoute
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/partner': typeof DashboardPartnerRoute
+  '/orders/new': typeof OrdersNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -177,10 +195,12 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/settings'
     | '/sitemap.xml'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/partner'
+    | '/orders/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -195,10 +215,12 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/settings'
     | '/sitemap.xml'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/partner'
+    | '/orders/new'
   id:
     | '__root__'
     | '/'
@@ -213,10 +235,12 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/settings'
     | '/sitemap.xml'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/partner'
+    | '/orders/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -227,11 +251,12 @@ export interface RootRouteChildren {
   CustomersRoute: typeof CustomersRoute
   GoldProductsRoute: typeof GoldProductsRoute
   LoginRoute: typeof LoginRoute
-  OrdersRoute: typeof OrdersRoute
+  OrdersRoute: typeof OrdersRouteWithChildren
   PartnersRoute: typeof PartnersRoute
   PlatformRoute: typeof PlatformRoute
   ReportsRoute: typeof ReportsRoute
   RoadmapRoute: typeof RoadmapRoute
+  SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DashboardAdminRoute: typeof DashboardAdminRoute
   DashboardBranchRoute: typeof DashboardBranchRoute
@@ -245,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roadmap': {
@@ -331,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/orders/new': {
+      id: '/orders/new'
+      path: '/new'
+      fullPath: '/orders/new'
+      preLoaderRoute: typeof OrdersNewRouteImport
+      parentRoute: typeof OrdersRoute
+    }
     '/dashboard/partner': {
       id: '/dashboard/partner'
       path: '/dashboard/partner'
@@ -355,6 +394,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface OrdersRouteChildren {
+  OrdersNewRoute: typeof OrdersNewRoute
+}
+
+const OrdersRouteChildren: OrdersRouteChildren = {
+  OrdersNewRoute: OrdersNewRoute,
+}
+
+const OrdersRouteWithChildren =
+  OrdersRoute._addFileChildren(OrdersRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
@@ -363,11 +413,12 @@ const rootRouteChildren: RootRouteChildren = {
   CustomersRoute: CustomersRoute,
   GoldProductsRoute: GoldProductsRoute,
   LoginRoute: LoginRoute,
-  OrdersRoute: OrdersRoute,
+  OrdersRoute: OrdersRouteWithChildren,
   PartnersRoute: PartnersRoute,
   PlatformRoute: PlatformRoute,
   ReportsRoute: ReportsRoute,
   RoadmapRoute: RoadmapRoute,
+  SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   DashboardAdminRoute: DashboardAdminRoute,
   DashboardBranchRoute: DashboardBranchRoute,

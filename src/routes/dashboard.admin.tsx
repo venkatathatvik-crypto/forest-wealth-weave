@@ -11,17 +11,15 @@ export const Route = createFileRoute("/dashboard/admin")({
 });
 
 function AdminDashboard() {
-  const totalGold = customers.reduce((s, c) => s + c.gold, 0);
-  const totalGmv = partners.reduce((s, p) => s + p.gmv, 0);
   return (
-    <AppShell title="Network Overview" subtitle="Live operating metrics across the Fortune Alliance network">
+    <AppShell title="Network Overview" subtitle="Operational workspace · Fortune Alliance network · sample data shown until backend integration">
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard label="Total Partners" value={String(partners.length * 47)} delta="+6 this quarter" icon={<Handshake size={16} />} />
-        <StatCard label="Total Branches" value="9,612" delta="+318 MoM" icon={<Building2 size={16} />} />
-        <StatCard label="Total Customers" value="1.24M" delta="+4.2% MoM" icon={<Users size={16} />} />
-        <StatCard label="Total Orders" value="184,210" delta="+12.4% MoM" icon={<ShoppingCart size={16} />} />
-        <StatCard label="Gold Volume" value={`${(totalGold * 1840).toFixed(0)} kg`} delta="+8.1% MoM" icon={<Coins size={16} />} />
-        <StatCard label="GMV (₹)" value={`₹ ${totalGmv.toFixed(0)} Cr`} delta="+11.6% MoM" />
+        <StatCard label="Partners" value={String(partners.length)} delta="Sample data" icon={<Handshake size={16} />} />
+        <StatCard label="Branches" value={String(branches.length)} delta="Sample data" icon={<Building2 size={16} />} />
+        <StatCard label="Customers" value={String(customers.length)} delta="Sample data" icon={<Users size={16} />} />
+        <StatCard label="Orders" value={String(orders.length)} delta="Sample data" icon={<ShoppingCart size={16} />} />
+        <StatCard label="Gold Volume" value="—" delta="Awaiting Augmont API" icon={<Coins size={16} />} />
+        <StatCard label="System Activity" value="Live" delta="All systems nominal" />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-5 mt-6">
