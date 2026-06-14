@@ -39,37 +39,38 @@ function Index() {
   return (
     <>
       {/* HERO */}
-      <section className="relative overflow-hidden bg-white">
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.08),transparent_55%)]" />
-        <div className="mx-auto max-w-7xl px-6 lg:px-10 pt-16 lg:pt-24 pb-20 lg:pb-28 grid lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center min-h-[82vh]">
+      <section className="relative overflow-hidden bg-emerald text-white">
+        <div className="absolute inset-0 -z-0 bg-[radial-gradient(ellipse_at_top_right,rgba(212,175,55,0.22),transparent_55%)]" />
+        <div className="absolute inset-0 -z-0 opacity-[0.06]" style={{ backgroundImage: "linear-gradient(rgba(212,175,55,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.4) 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-10 pt-14 lg:pt-20 pb-16 lg:pb-24 grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-3 rounded-sm border border-[color:var(--color-gold)]/40 bg-white px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
+            <div className="inline-flex items-center gap-3 rounded-sm border border-[color:var(--color-gold)]/40 bg-white/5 backdrop-blur px-3 py-1.5 text-[10px] uppercase tracking-[0.3em] text-gold">
               <span className="h-1 w-1 rounded-full bg-[color:var(--color-gold)]" />
               Onwards & Upwards · Est. 30 June 2022
             </div>
 
-            <h1 className="mt-7 font-display text-[44px] sm:text-6xl lg:text-7xl leading-[1.02] text-emerald">
+            <h1 className="mt-6 font-display text-[44px] sm:text-6xl lg:text-7xl leading-[1.02] text-white">
               From <span className="text-gradient-gold">everyday essentials</span> <br />
               to timeless treasures.
             </h1>
 
-            <p className="mt-7 max-w-xl text-base lg:text-lg text-muted-foreground leading-relaxed">
+            <p className="mt-6 max-w-xl text-base lg:text-lg text-white/75 leading-relaxed">
               2 Plus Fortune Alliances Private Limited (2+FAPL) is a Hyderabad-headquartered
               distribution house bridging premium brands with rural, semi-urban and urban India
               through a multi-brand aggregator model built on strategic partnerships,
               financial inclusion and last-mile connectivity.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link to="/contact" className="btn-emerald inline-flex items-center gap-2 rounded-sm px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.22em]">
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link to="/contact" className="btn-gold inline-flex items-center gap-2 rounded-sm px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.22em]">
                 Partner With Us <ArrowRight size={14} />
               </Link>
-              <Link to="/platform" className="btn-ghost-gold rounded-sm px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.22em]">
+              <Link to="/platform" className="rounded-sm px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.22em] border border-white/30 text-white hover:bg-white hover:text-emerald transition">
                 Explore Our Business
               </Link>
             </div>
 
-            <div className="mt-14 grid grid-cols-3 max-w-lg gap-8">
+            <div className="mt-10 grid grid-cols-3 max-w-lg gap-8">
               {[
                 ["11+", "Product Categories"],
                 ["25+ Yrs", "Founder Experience"],
@@ -77,18 +78,18 @@ function Index() {
               ].map(([v, l]) => (
                 <div key={l}>
                   <div className="font-display text-2xl lg:text-3xl text-gold">{v}</div>
-                  <div className="mt-1 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{l}</div>
+                  <div className="mt-1 text-[11px] uppercase tracking-[0.22em] text-white/60">{l}</div>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="relative">
-            <div className="absolute -inset-8 rounded-md bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.10),transparent_70%)]" />
-            <div className="card-gold relative rounded-md p-6 lg:p-8">
+            <div className="absolute -inset-8 rounded-md bg-[radial-gradient(circle_at_center,rgba(212,175,55,0.18),transparent_70%)]" />
+            <div className="relative rounded-md p-6 lg:p-8 bg-[color:var(--emerald-forest)]/70 border border-[color:var(--color-gold)]/30 backdrop-blur">
               <div className="flex items-center justify-between mb-4">
                 <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Business Model</div>
-                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Aggregator Flow</div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-white/55">Aggregator Flow</div>
               </div>
               <EcosystemNetwork />
             </div>
