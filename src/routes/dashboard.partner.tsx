@@ -34,14 +34,13 @@ export const Route = createFileRoute("/dashboard/partner")({
 });
 
 function PartnerDashboard() {
-  const revenue = orders.reduce((s, o) => s + o.amount, 0);
   return (
-    <AppShell title="Partner Console" subtitle="Meridian Capital Partners · Western region">
+    <AppShell title="Partner Console" subtitle="Meridian Capital Partners · Western region · sample data until backend integration">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="Branch Count" value={String(branches.length * 21)} delta="+12 MoM" icon={<Building2 size={16} />} />
-        <StatCard label="Orders (30d)" value="14,820" delta="+9.4%" icon={<ShoppingCart size={16} />} />
-        <StatCard label="Revenue (30d)" value={inr(revenue * 18)} delta="+11.2%" icon={<IndianRupee size={16} />} />
-        <StatCard label="Performance Score" value="94.8" delta="Tier · Platinum" icon={<Activity size={16} />} />
+        <StatCard label="My Branches" value={String(branches.length)} delta="Sample data" icon={<Building2 size={16} />} />
+        <StatCard label="Orders" value={String(orders.length)} delta="Sample data" icon={<ShoppingCart size={16} />} />
+        <StatCard label="Revenue Overview" value="—" delta="Awaiting backend" icon={<IndianRupee size={16} />} />
+        <StatCard label="Performance" value="—" delta="Awaiting backend" icon={<Activity size={16} />} />
       </div>
 
       <div className="glass-card rounded-md p-6 mt-6">
