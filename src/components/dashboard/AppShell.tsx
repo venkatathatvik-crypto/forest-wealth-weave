@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { useAuth, type Role } from "@/lib/mock/auth";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 import {
@@ -26,11 +26,41 @@ const NAV: NavItem[] = [
   { to: "/settings", label: "Settings", icon: SettingsIcon, roles: ["admin", "partner", "branch", "customer"] },
 ];
 
+// Map the stored role (which may be a raw backend role like "ROLE_SUPER_ADMIN"
+// after a real login, or a legacy mock role for demo logins) to the nav's Role.
+function toNavRole(raw: string | undefined): Role {
+  switch (raw) {
+    case "ROLE_SUPER_ADMIN":
+    case "admin":
+      return "admin";
+    case "ROLE_ALLIANCE_ADMIN":
+    case "partner":
+      return "partner";
+    case "ROLE_BRANCH_MANAGER":
+    case "ROLE_AGENT":
+    case "branch":
+      return "branch";
+    case "ROLE_CUSTOMER":
+    case "customer":
+      return "customer";
+    default:
+      return "admin";
+  }
+}
+
 export function AppShell({ children, title, subtitle }: { children: ReactNode; title: string; subtitle?: string }) {
   const { user, logout } = useAuth();
+  const nav = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const role: Role = user?.role ?? "admin";
+  const role: Role = toNavRole(user?.role);
   const items = NAV.filter((n) => n.roles.includes(role));
+
+  // Clear session AND leave the dashboard — without the redirect the page stays
+  // on /dashboard/* (role falls back to "admin"), so it looks like nothing happened.
+  const handleSignOut = () => {
+    logout();
+    nav({ to: "/login" });
+  };
 
   const allowed = NAV.some((n) => {
     const match = pathname === n.to || pathname.startsWith(n.to + "/");
@@ -45,7 +75,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
         <div className="max-w-md text-center">
           <h1 className="font-display text-4xl text-brand-green-primary mb-4">Access Denied</h1>
           <p className="text-sm text-text-secondary mb-6">You do not have permission to view this console workspace.</p>
-          <button onClick={logout} className="px-6 py-2.5 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors">
+          <button onClick={handleSignOut} className="px-6 py-2.5 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors">
             Sign Out
           </button>
         </div>
@@ -55,7 +85,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
 
   return (
     <div className="min-h-screen bg-bg-section flex">
-      <aside className="hidden lg:flex w-72 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
+      <aside className="hidden lg:flex w-72 shrink-0 flex-col border-r border-sidebar-border bg-sidebar h-screen sticky top-0">
         <div className="h-20 flex items-center px-6 border-b border-sidebar-border">
           <Link to="/" className="flex items-center">
             <img src={logoAsset.url} alt="Fortune Alliances" className="h-10 w-auto object-contain" />
@@ -109,7 +139,7 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
               <div className="text-[10px] uppercase tracking-[0.2em] text-sidebar-primary">{role}</div>
             </div>
           </div>
-          <button onClick={logout} className="w-full flex items-center justify-center gap-2 text-xs uppercase tracking-[0.2em] py-2 rounded-lg border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition">
+          <button onClick={handleSignOut} className="w-full flex items-center justify-center gap-2 text-xs uppercase tracking-[0.2em] py-2 rounded-lg border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition">
             <LogOut size={14} /> Sign Out
           </button>
         </div>

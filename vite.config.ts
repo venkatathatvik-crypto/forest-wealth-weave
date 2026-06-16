@@ -14,10 +14,11 @@ export default defineConfig({
   },
   vite: {
     server: {
-      port: 8080,
+      // 5173 so the frontend dev server doesn't collide with the backend on 8080.
+      port: 5173,
       strictPort: false,
       hmr: {
-        port: 8080,
+        port: 5173,
       },
     },
   },

@@ -16,22 +16,30 @@ export const Route = createFileRoute("/login")({
 });
 
 const ROLES: { id: Role; label: string; desc: string; icon: typeof Shield; demo: string }[] = [
-  { id: "admin", label: "Admin", desc: "Network-wide oversight & governance", icon: Shield, demo: "admin@2plusfortune.in" },
+  { id: "admin", label: "Admin", desc: "Network-wide oversight & governance", icon: Shield, demo: "admin@goldemi.com" },
   { id: "partner", label: "Partner", desc: "Distribution partner console", icon: Briefcase, demo: "partner@meridian.in" },
   { id: "branch", label: "Branch", desc: "Branch operations & customer desk", icon: Building2, demo: "branch@andheri-east.in" },
   { id: "customer", label: "Customer", desc: "Personal portfolio, orders & metal balance", icon: User, demo: "aarav.mehta@gmail.com" },
 ];
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { login, loginWithPassword, requestOtp, loginWithOtp } = useAuth();
   const nav = useNavigate();
   const [role, setRole] = useState<Role>("admin");
-  const [email, setEmail] = useState("admin@2plusfortune.in");
-  const [password, setPassword] = useState("••••••••");
-  
+  const [email, setEmail] = useState("admin@goldemi.com");
+  const [password, setPassword] = useState("");
+
+  // Admin auth method: password or email OTP.
+  const [authMethod, setAuthMethod] = useState<"password" | "otp">("password");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [info, setInfo] = useState("");
+
   // View mode: signin, register_customer, register_partner
   const [view, setView] = useState<"signin" | "register_customer" | "register_partner">("signin");
   const [successMsg, setSuccessMsg] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Registration Forms State
   const [customerForm, setCustomerForm] = useState({ name: "", phone: "", email: "", city: "", state: "" });
@@ -53,10 +61,53 @@ function LoginPage() {
     }
   }, []);
 
-  const submit = (e: React.FormEvent) => {
+  // Admin: request an email OTP (step 1 of the OTP flow).
+  const sendOtpHandler = async () => {
+    setError("");
+    setInfo("");
+    setLoading(true);
+    try {
+      await requestOtp(email);
+      setOtpSent(true);
+      setInfo(`A 6-digit code was sent to ${email}. Enter it below.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+
+    // Admin authenticates against the real backend; other roles use mock demo login.
+    if (role === "admin") {
+      setLoading(true);
+      try {
+        if (authMethod === "otp") {
+          // If the code hasn't been sent yet, the submit acts as "send OTP".
+          if (!otpSent) {
+            await requestOtp(email);
+            setOtpSent(true);
+            setInfo(`A 6-digit code was sent to ${email}. Enter it below.`);
+            return;
+          }
+          await loginWithOtp(email, otp);
+        } else {
+          await loginWithPassword(email, password);
+        }
+        nav({ to: "/dashboard/admin" });
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Login failed");
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     login(email, role);
-    nav({ to: role === "admin" ? "/dashboard/admin" : role === "partner" ? "/dashboard/partner" : role === "branch" ? "/dashboard/branch" : "/dashboard/customer" });
+    nav({ to: role === "partner" ? "/dashboard/partner" : role === "branch" ? "/dashboard/branch" : "/dashboard/customer" });
   };
 
   const handleRegisterCustomer = (e: React.FormEvent) => {
@@ -71,7 +122,21 @@ function LoginPage() {
 
   const pickRole = (r: Role) => {
     setRole(r);
+    setError("");
+    setInfo("");
+    setPassword("");
+    setOtp("");
+    setOtpSent(false);
     setEmail(ROLES.find((x) => x.id === r)!.demo);
+  };
+
+  const switchAuthMethod = (m: "password" | "otp") => {
+    setAuthMethod(m);
+    setError("");
+    setInfo("");
+    setPassword("");
+    setOtp("");
+    setOtpSent(false);
   };
 
   return (
@@ -110,22 +175,96 @@ function LoginPage() {
               </div>
               <p className="text-xs text-text-secondary mb-6 text-center">{ROLES.find((r) => r.id === role)!.desc}</p>
 
+              {/* Admin-only: choose password or email OTP */}
+              {role === "admin" && (
+                <div className="grid grid-cols-2 gap-2 mb-4 p-1 rounded-lg bg-bg-section border border-border">
+                  {(["password", "otp"] as const).map((m) => (
+                    <button
+                      key={m}
+                      type="button"
+                      onClick={() => switchAuthMethod(m)}
+                      className={`h-9 rounded-md text-[11px] uppercase tracking-[0.18em] font-semibold transition-colors ${
+                        authMethod === m
+                          ? "bg-brand-green-primary text-white"
+                          : "text-text-secondary hover:text-brand-green-primary"
+                      }`}
+                    >
+                      {m === "password" ? "Password" : "Email OTP"}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               <div className="space-y-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Work Email</span>
                   <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
                 </label>
-                <label className="block">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Password</span>
-                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
-                </label>
+
+                {/* Password method (non-admin roles always use this field) */}
+                {!(role === "admin" && authMethod === "otp") && (
+                  <label className="block">
+                    <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Password</span>
+                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
+                  </label>
+                )}
+
+                {/* OTP method (admin) */}
+                {role === "admin" && authMethod === "otp" && (
+                  <div className="space-y-3">
+                    <button
+                      type="button"
+                      onClick={sendOtpHandler}
+                      disabled={loading || !email}
+                      className="w-full h-10 rounded-lg border border-brand-green-primary text-brand-green-primary text-[11px] uppercase tracking-[0.18em] font-semibold hover:bg-brand-green-primary hover:text-white transition-colors disabled:opacity-50"
+                    >
+                      {loading && !otpSent ? "Sending…" : otpSent ? "Resend Code" : "Send OTP to Email"}
+                    </button>
+                    {otpSent && (
+                      <label className="block">
+                        <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">6-Digit Code</span>
+                        <input
+                          inputMode="numeric"
+                          maxLength={6}
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                          placeholder="••••••"
+                          className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary tracking-[0.4em] text-center"
+                        />
+                      </label>
+                    )}
+                  </div>
+                )}
               </div>
 
-              <button type="submit" className="mt-6 w-full h-11 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors">
-                Enter Console
+              {info && (
+                <p className="text-[12px] text-brand-green-primary mt-4 text-center bg-brand-green-secondary/10 border border-brand-green-secondary/30 rounded-lg py-2 px-3">
+                  {info}
+                </p>
+              )}
+              {error && (
+                <p className="text-[12px] text-red-600 mt-4 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading || (role === "admin" && authMethod === "otp" && otpSent && otp.length !== 6)}
+                className="mt-6 w-full h-11 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors disabled:opacity-60"
+              >
+                {loading
+                  ? "Please wait…"
+                  : role === "admin" && authMethod === "otp" && !otpSent
+                    ? "Send OTP"
+                    : role === "admin" && authMethod === "otp"
+                      ? "Verify & Enter"
+                      : "Enter Console"}
               </button>
               <p className="text-[11px] text-text-secondary mt-4 text-center">
-                Demo environment — credentials are not validated.
+                {role === "admin"
+                  ? "Admin signs in against the live backend. Demo admin: admin@goldemi.com / Admin@123"
+                  : "Demo environment — partner / branch / customer roles are not validated."}
               </p>
             </form>
           )}
