@@ -1,10 +1,16 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth, type Role } from "@/lib/mock/auth";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
-import { Shield, Briefcase, Building2 } from "lucide-react";
+import { Shield, Briefcase, Building2, User, CheckCircle2, X } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (search: Record<string, unknown>): { role?: Role } => {
+    return {
+      role: (search.role as Role) || undefined,
+    };
+  },
   head: () => ({ meta: [{ title: "Sign In — 2PlusFortuneAliances" }] }),
   component: LoginPage,
 });
@@ -13,6 +19,7 @@ const ROLES: { id: Role; label: string; desc: string; icon: typeof Shield; demo:
   { id: "admin", label: "Admin", desc: "Network-wide oversight & governance", icon: Shield, demo: "admin@2plusfortune.in" },
   { id: "partner", label: "Partner", desc: "Distribution partner console", icon: Briefcase, demo: "partner@meridian.in" },
   { id: "branch", label: "Branch", desc: "Branch operations & customer desk", icon: Building2, demo: "branch@andheri-east.in" },
+  { id: "customer", label: "Customer", desc: "Personal portfolio, orders & metal balance", icon: User, demo: "aarav.mehta@gmail.com" },
 ];
 
 function LoginPage() {
@@ -21,11 +28,45 @@ function LoginPage() {
   const [role, setRole] = useState<Role>("admin");
   const [email, setEmail] = useState("admin@2plusfortune.in");
   const [password, setPassword] = useState("••••••••");
+  
+  // View mode: signin, register_customer, register_partner
+  const [view, setView] = useState<"signin" | "register_customer" | "register_partner">("signin");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  // Registration Forms State
+  const [customerForm, setCustomerForm] = useState({ name: "", phone: "", email: "", city: "", state: "" });
+  const [partnerForm, setPartnerForm] = useState({ companyName: "", contactPerson: "", phone: "", email: "", gst: "", city: "", state: "" });
+
+  useEffect(() => {
+    const params = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    const r = params.get("role") as Role;
+    if (r && ["admin", "partner", "branch", "customer"].includes(r)) {
+      setRole(r);
+      const demoEmail = ROLES.find((x) => x.id === r)?.demo || "";
+      setEmail(demoEmail);
+    }
+    const mode = params.get("mode");
+    if (mode === "register_customer") {
+      setView("register_customer");
+    } else if (mode === "register_partner") {
+      setView("register_partner");
+    }
+  }, []);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     login(email, role);
-    nav({ to: role === "admin" ? "/dashboard/admin" : role === "partner" ? "/dashboard/partner" : "/dashboard/branch" });
+    nav({ to: role === "admin" ? "/dashboard/admin" : role === "partner" ? "/dashboard/partner" : role === "branch" ? "/dashboard/branch" : "/dashboard/customer" });
+  };
+
+  const handleRegisterCustomer = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSuccessMsg("Registration request received! Our Relationship Manager will contact you soon to complete documents verification and activate your gold account.");
+  };
+
+  const handleRegisterPartner = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSuccessMsg("Partner agreement registered! Our regional enablement team will contact you soon to verify your GST and finalize onboarding agreements.");
   };
 
   const pickRole = (r: Role) => {
@@ -34,65 +75,188 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[color:var(--emerald-deep)] grid lg:grid-cols-2">
-      <div className="hidden lg:flex flex-col justify-between p-12 border-r border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40">
-        <Link to="/"><img src={logoAsset.url} alt="Fortune Alliances" className="h-14 w-auto" /></Link>
-        <div>
-          <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Institutional Console</div>
-          <h2 className="font-display text-4xl mt-4 leading-tight max-w-md">
-            The alliance-led commerce backbone of Bharat.
-          </h2>
-          <p className="mt-4 text-sm text-foreground/70 max-w-md leading-relaxed">
-            A unified workspace for manufacturers, financial institutions, distribution partners and branches —
-            built to institutional-grade standards.
+    <div className="min-h-screen bg-bg-section flex items-center justify-center p-6 text-text-primary">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <Link to="/"><img src={logoAsset.url} alt="Fortune Alliances" className="h-12 mx-auto mb-6" /></Link>
+          <div className="text-[10px] uppercase tracking-[0.3em] text-brand-gold-premium mb-2">
+            {view === "signin" ? "Institutional Console" : view === "register_customer" ? "Customer Account Desk" : "Partner Network"}
+          </div>
+          <h1 className="font-display text-3xl text-brand-green-primary">
+            {view === "signin" ? "Access your workspace" : view === "register_customer" ? "Create Customer Account" : "Become a Partner"}
+          </h1>
+          <p className="text-sm text-text-secondary mt-2">
+            {view === "signin" ? "Select your role to continue" : "Fill out the registration details below"}
           </p>
         </div>
-        <div className="text-[10px] uppercase tracking-[0.2em] text-foreground/40">© 2026 2PlusFortuneAliances · SOC 2 Type II · RBI Aligned</div>
-      </div>
 
-      <div className="flex items-center justify-center p-6 lg:p-12">
-        <form onSubmit={submit} className="w-full max-w-md">
-          <div className="lg:hidden mb-6"><img src={logoAsset.url} alt="" className="h-10" /></div>
-          <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Sign In</div>
-          <h1 className="font-display text-3xl mt-2">Access your console</h1>
-          <p className="text-sm text-foreground/60 mt-2">Choose your role to enter the workspace.</p>
+        <Card className="p-8 bg-white border border-border shadow-sm">
+          {view === "signin" && (
+            <form onSubmit={submit}>
+              <div className="grid grid-cols-2 gap-3 mb-6">
+                {ROLES.map((r) => {
+                  const Icon = r.icon;
+                  const active = role === r.id;
+                  return (
+                    <button
+                      key={r.id} type="button" onClick={() => pickRole(r.id)}
+                      className={`p-4 rounded-lg border-2 text-left transition-all ${active ? "border-brand-green-primary bg-brand-green-primary text-white" : "border-border bg-white hover:border-brand-green-primary/50"}`}
+                    >
+                      <Icon size={20} className={active ? "text-white" : "text-text-secondary"} />
+                      <div className="text-xs font-medium mt-2">{r.label}</div>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-text-secondary mb-6 text-center">{ROLES.find((r) => r.id === role)!.desc}</p>
 
-          <div className="grid grid-cols-3 gap-2 mt-7">
-            {ROLES.map((r) => {
-              const Icon = r.icon;
-              const active = role === r.id;
-              return (
-                <button
-                  key={r.id} type="button" onClick={() => pickRole(r.id)}
-                  className={`p-3 rounded-sm border text-left transition ${active ? "border-[color:var(--color-gold)] bg-[color:var(--color-gold)]/10" : "border-[color:var(--color-border)] hover:border-[color:var(--color-gold)]/50"}`}
-                >
-                  <Icon size={16} className={active ? "text-gold" : "text-foreground/70"} />
-                  <div className="text-xs font-medium mt-2">{r.label}</div>
+              <div className="space-y-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Work Email</span>
+                  <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Password</span>
+                  <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
+                </label>
+              </div>
+
+              <button type="submit" className="mt-6 w-full h-11 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors">
+                Enter Console
+              </button>
+              <p className="text-[11px] text-text-secondary mt-4 text-center">
+                Demo environment — credentials are not validated.
+              </p>
+            </form>
+          )}
+
+          {view === "register_customer" && (
+            <form onSubmit={handleRegisterCustomer} className="space-y-4">
+              <label className="block">
+                <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Full Name</span>
+                <input required value={customerForm.name} onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Mobile Number</span>
+                  <input required type="tel" value={customerForm.phone} onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Email Address</span>
+                  <input required type="email" value={customerForm.email} onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">City</span>
+                  <input required value={customerForm.city} onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">State</span>
+                  <input required value={customerForm.state} onChange={(e) => setCustomerForm({ ...customerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+              </div>
+              
+              <button type="submit" className="w-full mt-6 h-11 bg-brand-green-primary text-white font-semibold text-xs uppercase tracking-[0.22em] rounded-lg hover:bg-brand-green-secondary transition-colors">
+                Submit Customer Registration
+              </button>
+            </form>
+          )}
+
+          {view === "register_partner" && (
+            <form onSubmit={handleRegisterPartner} className="space-y-4">
+              <label className="block">
+                <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Company Name</span>
+                <input required value={partnerForm.companyName} onChange={(e) => setPartnerForm({ ...partnerForm, companyName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+              </label>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Contact Person</span>
+                  <input required value={partnerForm.contactPerson} onChange={(e) => setPartnerForm({ ...partnerForm, contactPerson: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">GST Number</span>
+                  <input required value={partnerForm.gst} onChange={(e) => setPartnerForm({ ...partnerForm, gst: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Mobile Phone</span>
+                  <input required type="tel" value={partnerForm.phone} onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Work Email</span>
+                  <input required type="email" value={partnerForm.email} onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">City</span>
+                  <input required value={partnerForm.city} onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+                <label className="block">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">State</span>
+                  <input required value={partnerForm.state} onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                </label>
+              </div>
+
+              <button type="submit" className="w-full mt-6 h-11 bg-brand-green-primary text-white font-semibold text-xs uppercase tracking-[0.22em] rounded-lg hover:bg-brand-green-secondary transition-colors">
+                Apply as Partner
+              </button>
+            </form>
+          )}
+
+          {view === "signin" ? (
+            <div className="mt-6 pt-5 border-t border-border flex flex-col gap-2.5 text-center text-xs text-text-secondary">
+              <div>
+                Don't have a Customer account?{" "}
+                <button type="button" onClick={() => setView("register_customer")} className="text-brand-gold-premium font-semibold hover:underline">
+                  Register here
                 </button>
-              );
-            })}
-          </div>
-          <p className="text-[11px] text-foreground/55 mt-2">{ROLES.find((r) => r.id === role)!.desc}</p>
+              </div>
+              <div>
+                Want to become a distribution partner?{" "}
+                <button type="button" onClick={() => setView("register_partner")} className="text-brand-gold-premium font-semibold hover:underline">
+                  Register as Partner
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-6 pt-5 border-t border-border text-center text-xs">
+              <button type="button" onClick={() => setView("signin")} className="text-text-secondary hover:text-brand-green-primary font-semibold">
+                ← Back to Login
+              </button>
+            </div>
+          )}
+        </Card>
 
-          <div className="mt-6 space-y-4">
-            <label className="block">
-              <span className="text-[10px] uppercase tracking-[0.22em] text-foreground/65">Work Email</span>
-              <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full h-11 px-3 rounded-sm bg-[color:var(--emerald-forest)]/60 border border-[color:var(--color-border)] outline-none focus:border-[color:var(--color-gold)]/70 text-sm" />
-            </label>
-            <label className="block">
-              <span className="text-[10px] uppercase tracking-[0.22em] text-foreground/65">Password</span>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 w-full h-11 px-3 rounded-sm bg-[color:var(--emerald-forest)]/60 border border-[color:var(--color-border)] outline-none focus:border-[color:var(--color-gold)]/70 text-sm" />
-            </label>
-          </div>
-
-          <button type="submit" className="btn-gold mt-6 w-full h-11 rounded-sm text-xs font-semibold uppercase tracking-[0.22em]">
-            Enter Console
-          </button>
-          <p className="text-[11px] text-foreground/45 mt-4 text-center">
-            Demo environment — credentials are not validated.
-          </p>
-        </form>
+        <div className="text-center mt-6 text-[10px] uppercase tracking-[0.2em] text-text-secondary/60">
+          © 2026 2PlusFortuneAliances · SOC 2 Type II · RBI Aligned
+        </div>
       </div>
+
+      {/* POPUP / DIALOG DESK */}
+      {successMsg && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
+          <Card className="w-full max-w-md p-6 bg-background relative border border-border shadow-2xl text-center text-text-primary">
+            <button onClick={() => setSuccessMsg("")} className="absolute right-4 top-4 text-text-secondary hover:text-text-primary">
+              <X size={18} />
+            </button>
+            <CheckCircle2 size={56} className="text-brand-gold-premium mx-auto mb-4" />
+            <h3 className="font-display text-2xl text-brand-green-primary mb-2">Request Logged</h3>
+            <p className="text-sm text-text-secondary leading-relaxed mb-6 max-w-xs mx-auto">
+              {successMsg}
+            </p>
+            <button
+              onClick={() => { setSuccessMsg(""); setView("signin"); }}
+              className="h-10 px-6 rounded-lg bg-brand-gold-premium text-brand-green-primary font-semibold text-xs uppercase tracking-[0.2em] hover:bg-brand-gold-rich transition-colors"
+            >
+              Back to Login
+            </button>
+          </Card>
+        </div>
+      )}
     </div>
   );
 }
+export default LoginPage;

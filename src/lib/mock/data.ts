@@ -47,17 +47,18 @@ export const customers: Customer[] = [
 ];
 
 export type GoldProduct = {
-  id: string; name: string; weight: number; purity: "24K" | "22K"; type: "Coin" | "Bar" | "Jewellery";
+  id: string; name: string; weight: number; purity: "24K" | "22K"; type: "Coin" | "Bar" | "Jewellery" | "Digital" | "EMI";
   premium: number; stock: number;
 };
 
 export const goldProducts: GoldProduct[] = [
-  { id: "G-1G24", name: "Sovereign 1g Coin", weight: 1, purity: "24K", type: "Coin", premium: 4.2, stock: 412 },
-  { id: "G-5G24", name: "Heritage 5g Coin", weight: 5, purity: "24K", type: "Coin", premium: 3.8, stock: 188 },
-  { id: "G-10G24", name: "Imperial 10g Bar", weight: 10, purity: "24K", type: "Bar", premium: 3.1, stock: 96 },
+  { id: "G-1G24", name: "Gold Coin 1g", weight: 1, purity: "24K", type: "Coin", premium: 4.2, stock: 412 },
+  { id: "G-5G24", name: "Gold Coin 5g", weight: 5, purity: "24K", type: "Coin", premium: 3.8, stock: 188 },
+  { id: "G-10G24", name: "Gold Coin 10g", weight: 10, purity: "24K", type: "Coin", premium: 3.1, stock: 96 },
+  { id: "G-DIGI", name: "Digital Gold", weight: 1, purity: "24K", type: "Digital", premium: 0.5, stock: 99999 },
+  { id: "G-EMI", name: "Gold EMI Plans", weight: 10, purity: "24K", type: "EMI", premium: 1.5, stock: 5000 },
   { id: "G-50G24", name: "Vault 50g Bar", weight: 50, purity: "24K", type: "Bar", premium: 2.4, stock: 38 },
   { id: "G-100G24", name: "Reserve 100g Bar", weight: 100, purity: "24K", type: "Bar", premium: 2.0, stock: 12 },
-  { id: "G-8G22", name: "Lakshmi 8g Coin", weight: 8, purity: "22K", type: "Coin", premium: 5.0, stock: 142 },
 ];
 
 export type Order = {

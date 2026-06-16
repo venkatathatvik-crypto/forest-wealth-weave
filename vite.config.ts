@@ -12,4 +12,13 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      port: 8080,
+      strictPort: false,
+      hmr: {
+        port: 8080,
+      },
+    },
+  },
 });

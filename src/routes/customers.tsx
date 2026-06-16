@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatusPill, PageToolbar } from "@/components/dashboard/widgets";
+import { Card } from "@/components/ui/card";
 import { customers as seed, type Customer } from "@/lib/mock/data";
 import { Plus, Search, X } from "lucide-react";
 
@@ -27,22 +28,22 @@ function CustomersPage() {
   return (
     <AppShell title="Customers" subtitle={`${rows.length.toLocaleString("en-IN")} customers in the active book`}>
       <PageToolbar>
-        <div className="flex items-center gap-2 px-3 h-10 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 w-80">
-          <Search size={14} className="text-foreground/50" />
+        <div className="flex items-center gap-2 px-3 h-10 rounded-lg border border-border bg-background w-80">
+          <Search size={14} className="text-text-secondary" />
           <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, phone or ID…" className="bg-transparent outline-none text-sm flex-1" />
         </div>
-        <select value={kyc} onChange={(e) => setKyc(e.target.value)} className="h-10 px-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 text-sm">
+        <select value={kyc} onChange={(e) => setKyc(e.target.value)} className="h-10 px-3 rounded-lg border border-border bg-background text-sm">
           {["All", "Verified", "Pending", "Rejected"].map((s) => <option key={s}>{s}</option>)}
         </select>
         <div className="flex-1" />
-        <button onClick={() => setOpen(true)} className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2">
+        <button onClick={() => setOpen(true)} className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2 hover:bg-brand-gold-rich transition-colors">
           <Plus size={14} /> Create Customer
         </button>
       </PageToolbar>
 
-      <div className="glass-card rounded-md overflow-hidden">
+      <Card className="overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-[color:var(--emerald-forest)]/60 text-[10px] uppercase tracking-[0.22em] text-foreground/65">
+          <thead className="bg-brand-green-secondary/20 text-[10px] uppercase tracking-[0.22em] text-text-secondary">
             <tr>
               <th className="text-left px-4 py-3">Customer</th>
               <th className="text-left px-4 py-3">Phone</th>
@@ -53,21 +54,21 @@ function CustomersPage() {
               <th className="text-left px-4 py-3">Joined</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[color:var(--color-border)]">
+          <tbody className="divide-y divide-border">
             {filtered.map((c) => (
-              <tr key={c.id} className="hover:bg-white/[0.02]">
-                <td className="px-4 py-3"><div>{c.name}</div><div className="text-[10px] text-foreground/55">{c.id}</div></td>
+              <tr key={c.id} className="hover:bg-bg-section">
+                <td className="px-4 py-3"><div>{c.name}</div><div className="text-[10px] text-text-secondary">{c.id}</div></td>
                 <td className="px-4 py-3">{c.phone}</td>
                 <td className="px-4 py-3">{c.city}</td>
                 <td className="px-4 py-3">{c.branch}</td>
-                <td className="px-4 py-3 text-right text-gold">{c.gold.toFixed(1)}</td>
+                <td className="px-4 py-3 text-right text-brand-gold-premium">{c.gold.toFixed(1)}</td>
                 <td className="px-4 py-3"><StatusPill status={c.kyc} /></td>
-                <td className="px-4 py-3 text-foreground/70">{c.joined}</td>
+                <td className="px-4 py-3 text-text-secondary">{c.joined}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </Card>
 
       {open && <CustomerDialog onSave={(c) => { setRows([c, ...rows]); setOpen(false); }} onClose={() => setOpen(false)} />}
     </AppShell>
@@ -81,10 +82,10 @@ function CustomerDialog({ onSave, onClose }: { onSave: (c: Customer) => void; on
   });
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
-      <div className="glass-card rounded-md w-full max-w-lg p-6 bg-[color:var(--emerald-forest)]">
+      <Card className="w-full max-w-lg p-6 bg-background">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display text-2xl">Create Customer</h3>
-          <button onClick={onClose} className="text-foreground/60 hover:text-foreground"><X size={18} /></button>
+          <h3 className="font-display text-2xl text-brand-green-primary">Create Customer</h3>
+          <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
         </div>
         <form onSubmit={(e) => { e.preventDefault(); onSave(form); }} className="grid grid-cols-2 gap-3">
           <Field label="Full Name" full><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
@@ -97,16 +98,16 @@ function CustomerDialog({ onSave, onClose }: { onSave: (c: Customer) => void; on
             </select>
           </Field>
           <div className="col-span-2 flex justify-end gap-2 mt-2">
-            <button type="button" onClick={onClose} className="h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] border border-[color:var(--color-border)]">Cancel</button>
-            <button type="submit" className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold">Create Customer</button>
+            <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>
+            <button type="submit" className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold hover:bg-brand-gold-rich transition-colors">Create Customer</button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
 
-const i = "w-full h-10 px-3 rounded-sm bg-[color:var(--emerald-deep)] border border-[color:var(--color-border)] outline-none focus:border-[color:var(--color-gold)]/70 text-sm";
+const i = "w-full h-10 px-3 rounded-lg bg-background border border-border outline-none focus:border-brand-gold-premium text-sm";
 function Field({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
-  return <label className={`block ${full ? "col-span-2" : ""}`}><span className="text-[10px] uppercase tracking-[0.22em] text-foreground/65">{label}</span><div className="mt-1.5">{children}</div></label>;
+  return <label className={`block ${full ? "col-span-2" : ""}`}><span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">{label}</span><div className="mt-1.5">{children}</div></label>;
 }

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell } from "@/components/dashboard/AppShell";
+import { Card } from "@/components/ui/card";
 import { orders, partners, inr } from "@/lib/mock/data";
 import { Download, FileSpreadsheet, FileText } from "lucide-react";
 
@@ -47,63 +48,63 @@ function ReportsPage() {
 
   return (
     <AppShell title="Reports" subtitle="Institutional reporting · downloadable artifacts">
-      <div className="glass-card rounded-md p-6 mb-6 flex flex-wrap items-end justify-between gap-4">
+      <Card className="p-6 mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="text-[10px] uppercase tracking-[0.28em] text-gold/80">Active Report</div>
-          <h2 className="font-display text-2xl mt-1">Sales Report</h2>
-          <p className="text-sm text-foreground/65 mt-1">Period · {range} · {orders.length} orders · {inr(total)} GMV</p>
+          <div className="text-[10px] uppercase tracking-[0.28em] text-brand-gold-premium/80">Active Report</div>
+          <h2 className="font-display text-2xl mt-1 text-brand-green-primary">Sales Report</h2>
+          <p className="text-sm text-text-secondary mt-1">Period · {range} · {orders.length} orders · {inr(total)} GMV</p>
         </div>
         <div className="flex items-center gap-2">
-          <select value={range} onChange={(e) => setRange(e.target.value)} className="h-10 px-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 text-sm">
+          <select value={range} onChange={(e) => setRange(e.target.value)} className="h-10 px-3 rounded-lg border border-border bg-background text-sm">
             {["Today", "Last 7 days", "Last 30 days", "Quarter to date", "Year to date"].map((s) => <option key={s}>{s}</option>)}
           </select>
-          <button onClick={downloadCsv} className="h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] border border-[color:var(--color-border)] hover:border-[color:var(--color-gold)]/60 inline-flex items-center gap-2">
+          <button onClick={downloadCsv} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border hover:border-brand-gold-premium/60 inline-flex items-center gap-2">
             <Download size={14} /> Excel (CSV)
           </button>
-          <button onClick={downloadPdf} className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2">
+          <button onClick={downloadPdf} className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2 hover:bg-brand-gold-rich transition-colors">
             <Download size={14} /> PDF
           </button>
         </div>
-      </div>
+      </Card>
 
       <div className="grid lg:grid-cols-2 gap-5">
-        <div className="glass-card rounded-md p-6">
-          <div className="text-[10px] uppercase tracking-[0.28em] text-gold/80">GMV by Partner</div>
+        <Card className="p-6">
+          <div className="text-[10px] uppercase tracking-[0.28em] text-brand-gold-premium/80">GMV by Partner</div>
           <div className="mt-4 space-y-3">
             {partners.map((p) => (
               <div key={p.id}>
-                <div className="flex justify-between text-sm"><span>{p.name}</span><span className="text-gold">₹ {p.gmv.toFixed(1)} Cr</span></div>
-                <div className="h-1 rounded-full bg-[color:var(--color-border)] mt-1.5 overflow-hidden">
-                  <div className="h-full bg-[color:var(--color-gold)]" style={{ width: `${(p.gmv / 265) * 100}%` }} />
+                <div className="flex justify-between text-sm"><span>{p.name}</span><span className="text-brand-gold-premium">₹ {p.gmv.toFixed(1)} Cr</span></div>
+                <div className="h-1 rounded-full bg-border mt-1.5 overflow-hidden">
+                  <div className="h-full bg-brand-gold-premium" style={{ width: `${(p.gmv / 265) * 100}%` }} />
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </Card>
 
-        <div className="glass-card rounded-md p-6">
-          <div className="text-[10px] uppercase tracking-[0.28em] text-gold/80">Available Reports</div>
-          <div className="mt-3 divide-y divide-[color:var(--color-border)]">
+        <Card className="p-6">
+          <div className="text-[10px] uppercase tracking-[0.28em] text-brand-gold-premium/80">Available Reports</div>
+          <div className="mt-3 divide-y divide-border">
             {reports.map((r) => {
               const Icon = r.icon;
               return (
                 <div key={r.name} className="py-3 flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 grid place-items-center rounded-sm bg-[color:var(--color-gold)]/10 text-gold"><Icon size={15} /></div>
+                    <div className="h-9 w-9 grid place-items-center rounded-lg bg-brand-gold-premium/10 text-brand-gold-premium"><Icon size={15} /></div>
                     <div>
                       <div className="text-sm">{r.name}</div>
-                      <div className="text-[11px] text-foreground/55">{r.desc}</div>
+                      <div className="text-[11px] text-text-secondary">{r.desc}</div>
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={downloadCsv} className="h-8 px-2 text-[10px] uppercase tracking-[0.18em] rounded-sm border border-[color:var(--color-border)] hover:border-[color:var(--color-gold)]/60">CSV</button>
-                    <button onClick={downloadPdf} className="h-8 px-2 text-[10px] uppercase tracking-[0.18em] rounded-sm border border-[color:var(--color-border)] hover:border-[color:var(--color-gold)]/60">PDF</button>
+                    <button onClick={downloadCsv} className="h-8 px-2 text-[10px] uppercase tracking-[0.18em] rounded-lg border border-border hover:border-brand-gold-premium/60">CSV</button>
+                    <button onClick={downloadPdf} className="h-8 px-2 text-[10px] uppercase tracking-[0.18em] rounded-lg border border-border hover:border-brand-gold-premium/60">PDF</button>
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        </Card>
       </div>
     </AppShell>
   );

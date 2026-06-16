@@ -23,28 +23,29 @@ export function SiteFooter() {
           {
             title: "Company",
             links: [
-              ["About 2+FAPL", "/about"],
-              ["Founder", "/about"],
-              ["Leadership", "/about"],
-              ["Contact", "/contact"],
+              { label: "About 2+FAPL", to: "/about" },
+              { label: "Founder", to: "/about" },
+              { label: "Leadership", to: "/about" },
+              { label: "Contact", to: "/contact" },
             ],
           },
           {
             title: "Business",
             links: [
-              ["Business Model", "/platform"],
-              ["Digital Initiatives", "/platform"],
-              ["Distribution Channels", "/"],
-              ["Upcoming Additions", "/roadmap"],
+              { label: "Business Model", to: "/platform" },
+              { label: "Digital Initiatives", to: "/platform" },
+              { label: "Distribution Channels", to: "/" },
+              { label: "Upcoming Additions", to: "/roadmap" },
             ],
           },
           {
             title: "Network",
             links: [
-              ["Manufacturing Brands", "/partners"],
-              ["Business Partners", "/partners"],
-              ["Branches", "/partners"],
-              ["Partner Login", "/login"],
+              { label: "Manufacturing Brands", to: "/partners" },
+              { label: "Business Partners", to: "/partners" },
+              { label: "Branches", to: "/partners" },
+              { label: "Customer Login", to: "/login", search: { role: "customer" } },
+              { label: "Partner Login", to: "/login", search: { role: "partner" } },
             ],
           },
         ].map((col) => (
@@ -53,10 +54,10 @@ export function SiteFooter() {
               {col.title}
             </div>
             <ul className="space-y-3">
-              {col.links.map(([label, to]) => (
-                <li key={label}>
-                  <Link to={to} className="text-sm text-white/80 hover:text-gold transition-colors">
-                    {label}
+              {col.links.map((link) => (
+                <li key={link.label}>
+                  <Link to={link.to} search={link.search} className="text-sm text-white/80 hover:text-gold transition-colors">
+                    {link.label}
                   </Link>
                 </li>
               ))}

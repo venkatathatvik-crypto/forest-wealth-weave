@@ -44,7 +44,7 @@ function GoldProductsPage() {
             return (
               <div key={p.id} className="glass-card rounded-md p-5 flex gap-4">
                 <div className="h-20 w-20 shrink-0 rounded-sm grid place-items-center text-4xl" style={{ background: "linear-gradient(135deg, #2a1d08, #6b4f15)", boxShadow: "inset 0 0 20px rgba(212,175,55,0.3)" }}>
-                  {p.type === "Bar" ? "▰" : "●"}
+                  {p.type === "Bar" ? "▰" : p.type === "Digital" ? "⚡" : p.type === "EMI" ? "📅" : "●"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-[10px] uppercase tracking-[0.22em] text-gold/80">{p.purity} · {p.type}</div>

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { PageHero } from "@/components/site/PageHero";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -15,17 +16,11 @@ export const Route = createFileRoute("/about")({
 function AboutPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 pt-20 pb-16 bg-white">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">About 2+FAPL</div>
-        <h1 className="font-display text-5xl lg:text-7xl mt-5 max-w-4xl leading-[1.05] text-emerald">
-          A strategic alliance built on <span className="text-gradient-gold">mutual growth</span> and shared success.
-        </h1>
-        <p className="mt-8 max-w-3xl text-lg text-muted-foreground leading-relaxed">
-          Founded on 30 June 2022 and headquartered in Hyderabad, 2 Plus Fortune Alliances
-          Private Limited (2+FAPL) represents a strategic alliance between two fortunate enterprises,
-          committed to fostering beneficial partnerships that drive value for all stakeholders.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="About 2+FAPL · Est. 30 June 2022"
+        title={<>A strategic alliance built on <span className="text-brand-gold-premium">mutual growth</span> and shared success.</>}
+        subtitle="Founded on 30 June 2022 and headquartered in Hyderabad, 2 Plus Fortune Alliances Private Limited (2+FAPL) represents a strategic alliance between two fortunate enterprises, committed to fostering beneficial partnerships that drive value for all stakeholders."
+      />
 
       <section className="section-offwhite">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 grid lg:grid-cols-3 gap-6">

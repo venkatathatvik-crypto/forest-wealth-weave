@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PageHero } from "@/components/site/PageHero";
 
 export const Route = createFileRoute("/partners")({
   head: () => ({
@@ -42,16 +43,11 @@ const businessPartners = [
 function PartnersPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 pt-20 pb-14">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Brands & Partners</div>
-        <h1 className="font-display text-5xl lg:text-6xl mt-5 max-w-4xl leading-[1.05] text-emerald">
-          Associated manufacturing brands and <span className="text-gradient-gold">trusted business partners</span>.
-        </h1>
-        <p className="mt-6 max-w-3xl text-lg text-muted-foreground leading-relaxed">
-          2+FAPL collaborates with leading OEMs and a network of rural financial institutions,
-          cooperative societies, NBFCs, foundations and trusts to deliver quality products across India.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Brands & Partners · 18+ Business Partners"
+        title={<>Associated manufacturing brands and <span className="text-brand-gold-premium">trusted business partners</span>.</>}
+        subtitle="2+FAPL collaborates with leading OEMs and a network of rural financial institutions, cooperative societies, NBFCs, foundations and trusts to deliver quality products across India."
+      />
 
       {brandCategories.map((cat, idx) => (
         <section key={cat.title} className={`${idx % 2 === 1 ? "section-offwhite" : ""}`}>
