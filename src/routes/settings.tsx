@@ -12,11 +12,15 @@ function SettingsPage() {
   const { user } = useAuth();
   const sections = [
     { icon: User, title: "Profile", desc: "Personal details, contact information and signature" },
-    { icon: Building2, title: "Organisation", desc: "Entity registration, branch hierarchy and territories" },
+    ...(user?.role !== "customer" ? [
+      { icon: Building2, title: "Organisation", desc: "Entity registration, branch hierarchy and territories" },
+    ] : []),
     { icon: Lock, title: "Security", desc: "Password, MFA enrolment and active session control" },
     { icon: Bell, title: "Notifications", desc: "Email, SMS and in-app alert preferences" },
-    { icon: Plug, title: "Integrations", desc: "Augmont API, payment gateways, KYC and accounting" },
-    { icon: Shield, title: "Compliance", desc: "RBI advisories, GST configuration and audit log access" },
+    ...(user?.role !== "customer" ? [
+      { icon: Plug, title: "Integrations", desc: "Augmont API, payment gateways, KYC and accounting" },
+      { icon: Shield, title: "Compliance", desc: "RBI advisories, GST configuration and audit log access" },
+    ] : []),
   ];
   return (
     <AppShell title="Settings" subtitle="Workspace configuration · operational controls">

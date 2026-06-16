@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { EcosystemNetwork } from "@/components/site/EcosystemNetwork";
+import { PageHero } from "@/components/site/PageHero";
 import { Megaphone, MessageCircle, Target, Smartphone, Share2, BarChart3 } from "lucide-react";
 
 export const Route = createFileRoute("/platform")({
@@ -36,17 +37,11 @@ const flowSteps = [
 function PlatformPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 pt-20 pb-14 bg-white">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Business Model</div>
-        <h1 className="font-display text-5xl lg:text-7xl mt-5 max-w-4xl leading-[1.05] text-emerald">
-          The 2+FAPL <span className="text-gradient-gold">aggregator</span> model.
-        </h1>
-        <p className="mt-7 max-w-3xl text-lg text-muted-foreground leading-relaxed">
-          We operate as an intermediary bridging brands and rural markets — optimising logistics,
-          warehousing and last-mile delivery through partnerships with MFIs, NBFCs, cooperative societies,
-          Section 8 companies, trusts and foundations.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Business Model · Aggregator Distribution"
+        title={<>The 2+FAPL <span className="text-brand-gold-premium">aggregator</span> model.</>}
+        subtitle="We operate as an intermediary bridging brands and rural markets — optimising logistics, warehousing and last-mile delivery through partnerships with MFIs, NBFCs, cooperative societies, Section 8 companies, trusts and foundations."
+      />
 
       {/* ECOSYSTEM */}
       <section className="section-offwhite">

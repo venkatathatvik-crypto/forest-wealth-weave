@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { PageHero } from "@/components/site/PageHero";
 
 export const Route = createFileRoute("/roadmap")({
   head: () => ({
@@ -24,17 +25,11 @@ const upcoming = [
 function RoadmapPage() {
   return (
     <>
-      <section className="mx-auto max-w-7xl px-6 lg:px-10 pt-20 pb-14 bg-white">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-gold">Upcoming Additions</div>
-        <h1 className="font-display text-5xl lg:text-7xl mt-5 max-w-4xl leading-[1.05] text-emerald">
-          Expanding our portfolio. <br />
-          <span className="text-gradient-gold">Enriching lives.</span>
-        </h1>
-        <p className="mt-7 max-w-3xl text-lg text-muted-foreground leading-relaxed">
-          Building a better tomorrow with new product categories planned for the 2+FAPL distribution
-          network — diverse portfolio, new opportunities, stronger impact and sustainable growth.
-        </p>
-      </section>
+      <PageHero
+        eyebrow="Upcoming Additions · Growing Portfolio"
+        title={<>Expanding our portfolio. <span className="text-brand-gold-premium">Enriching lives.</span></>}
+        subtitle="Building a better tomorrow with new product categories planned for the 2+FAPL distribution network — diverse portfolio, new opportunities, stronger impact and sustainable growth."
+      />
 
       <section className="section-offwhite">
         <div className="mx-auto max-w-7xl px-6 lg:px-10 py-20 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">

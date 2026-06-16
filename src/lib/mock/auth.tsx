@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-export type Role = "admin" | "partner" | "branch";
+export type Role = "admin" | "partner" | "branch" | "customer";
 export type User = { email: string; name: string; role: Role };
 
 type AuthCtx = {
