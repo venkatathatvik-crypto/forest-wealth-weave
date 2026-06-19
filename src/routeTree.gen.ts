@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SetPasswordRouteImport } from './routes/set-password'
 import { Route as RoadmapRouteImport } from './routes/roadmap'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PlatformRouteImport } from './routes/platform'
@@ -28,6 +29,8 @@ import { Route as DashboardPartnerRouteImport } from './routes/dashboard.partner
 import { Route as DashboardCustomerRouteImport } from './routes/dashboard.customer'
 import { Route as DashboardBranchRouteImport } from './routes/dashboard.branch'
 import { Route as DashboardAdminRouteImport } from './routes/dashboard.admin'
+import { Route as AdminPartnersRouteImport } from './routes/admin.partners'
+import { Route as AdminLeadsRouteImport } from './routes/admin.leads'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -37,6 +40,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetPasswordRoute = SetPasswordRouteImport.update({
+  id: '/set-password',
+  path: '/set-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RoadmapRoute = RoadmapRouteImport.update({
@@ -124,6 +132,16 @@ const DashboardAdminRoute = DashboardAdminRouteImport.update({
   path: '/dashboard/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPartnersRoute = AdminPartnersRouteImport.update({
+  id: '/admin/partners',
+  path: '/admin/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLeadsRoute = AdminLeadsRouteImport.update({
+  id: '/admin/leads',
+  path: '/admin/leads',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -138,8 +156,11 @@ export interface FileRoutesByFullPath {
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/set-password': typeof SetPasswordRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/partners': typeof AdminPartnersRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/customer': typeof DashboardCustomerRoute
@@ -159,8 +180,11 @@ export interface FileRoutesByTo {
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/set-password': typeof SetPasswordRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/partners': typeof AdminPartnersRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/customer': typeof DashboardCustomerRoute
@@ -181,8 +205,11 @@ export interface FileRoutesById {
   '/platform': typeof PlatformRoute
   '/reports': typeof ReportsRoute
   '/roadmap': typeof RoadmapRoute
+  '/set-password': typeof SetPasswordRoute
   '/settings': typeof SettingsRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin/leads': typeof AdminLeadsRoute
+  '/admin/partners': typeof AdminPartnersRoute
   '/dashboard/admin': typeof DashboardAdminRoute
   '/dashboard/branch': typeof DashboardBranchRoute
   '/dashboard/customer': typeof DashboardCustomerRoute
@@ -204,8 +231,11 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/set-password'
     | '/settings'
     | '/sitemap.xml'
+    | '/admin/leads'
+    | '/admin/partners'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/customer'
@@ -225,8 +255,11 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/set-password'
     | '/settings'
     | '/sitemap.xml'
+    | '/admin/leads'
+    | '/admin/partners'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/customer'
@@ -246,8 +279,11 @@ export interface FileRouteTypes {
     | '/platform'
     | '/reports'
     | '/roadmap'
+    | '/set-password'
     | '/settings'
     | '/sitemap.xml'
+    | '/admin/leads'
+    | '/admin/partners'
     | '/dashboard/admin'
     | '/dashboard/branch'
     | '/dashboard/customer'
@@ -268,8 +304,11 @@ export interface RootRouteChildren {
   PlatformRoute: typeof PlatformRoute
   ReportsRoute: typeof ReportsRoute
   RoadmapRoute: typeof RoadmapRoute
+  SetPasswordRoute: typeof SetPasswordRoute
   SettingsRoute: typeof SettingsRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AdminLeadsRoute: typeof AdminLeadsRoute
+  AdminPartnersRoute: typeof AdminPartnersRoute
   DashboardAdminRoute: typeof DashboardAdminRoute
   DashboardBranchRoute: typeof DashboardBranchRoute
   DashboardCustomerRoute: typeof DashboardCustomerRoute
@@ -290,6 +329,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/set-password': {
+      id: '/set-password'
+      path: '/set-password'
+      fullPath: '/set-password'
+      preLoaderRoute: typeof SetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/roadmap': {
@@ -411,6 +457,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/partners': {
+      id: '/admin/partners'
+      path: '/admin/partners'
+      fullPath: '/admin/partners'
+      preLoaderRoute: typeof AdminPartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/leads': {
+      id: '/admin/leads'
+      path: '/admin/leads'
+      fullPath: '/admin/leads'
+      preLoaderRoute: typeof AdminLeadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -438,8 +498,11 @@ const rootRouteChildren: RootRouteChildren = {
   PlatformRoute: PlatformRoute,
   ReportsRoute: ReportsRoute,
   RoadmapRoute: RoadmapRoute,
+  SetPasswordRoute: SetPasswordRoute,
   SettingsRoute: SettingsRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AdminLeadsRoute: AdminLeadsRoute,
+  AdminPartnersRoute: AdminPartnersRoute,
   DashboardAdminRoute: DashboardAdminRoute,
   DashboardBranchRoute: DashboardBranchRoute,
   DashboardCustomerRoute: DashboardCustomerRoute,

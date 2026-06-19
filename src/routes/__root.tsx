@@ -127,13 +127,15 @@ function RootComponent() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isApp =
     pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/admin") ||
     pathname.startsWith("/customers") ||
     pathname.startsWith("/gold-products") ||
     pathname.startsWith("/orders") ||
     pathname.startsWith("/reports") ||
     pathname.startsWith("/branches") ||
     pathname.startsWith("/settings") ||
-    pathname === "/login";
+    pathname === "/login" ||
+    pathname === "/set-password";
 
   return (
     <QueryClientProvider client={queryClient}>

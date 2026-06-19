@@ -1,9 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatusPill, PageToolbar } from "@/components/dashboard/widgets";
-import { branches as seed, partners, type Branch } from "@/lib/mock/data";
-import { Plus, Pencil, Search, X } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { useAuth, backendRoleToMockRole } from "@/lib/mock/auth";
+import {
+  adminListBranches, adminUpdateBranch, adminDeactivateBranch, adminSyncBranchAugmont,
+  partnerListBranches, partnerCreateBranch, partnerUpdateBranch, partnerDeactivateBranch,
+  partnerCreateBranchManager,
+  type Branch, type CreateBranchInput, type BranchManagerInput,
+} from "@/lib/api/branches";
+import { Plus, Pencil, Search, X, UserPlus } from "lucide-react";
 
 export const Route = createFileRoute("/branches")({
   head: () => ({ meta: [{ title: "Branches — 2PlusFortuneAliances" }] }),
@@ -11,115 +19,243 @@ export const Route = createFileRoute("/branches")({
 });
 
 function BranchesPage() {
-  const [rows, setRows] = useState<Branch[]>(seed);
+  const { user } = useAuth();
+  const isPartner = backendRoleToMockRole(user?.role) === "partner";
+  const isAdmin = backendRoleToMockRole(user?.role) === "admin";
+  const qc = useQueryClient();
   const [q, setQ] = useState("");
-  const [status, setStatus] = useState("All");
   const [editing, setEditing] = useState<Branch | null>(null);
-  const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [managerFor, setManagerFor] = useState<Branch | null>(null);
 
-  const filtered = useMemo(
-    () => rows.filter((r) =>
-      (status === "All" || r.status === status) &&
-      (r.name.toLowerCase().includes(q.toLowerCase()) || r.city.toLowerCase().includes(q.toLowerCase()) || r.id.includes(q)),
-    ),
-    [rows, q, status],
-  );
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["branches", isPartner ? "partner" : "admin", q],
+    queryFn: () =>
+      isPartner
+        ? partnerListBranches({ q: q || undefined })
+        : adminListBranches({ q: q || undefined }),
+  });
+  const rows = data?.items ?? [];
+  const refresh = () => qc.invalidateQueries({ queryKey: ["branches"] });
 
-  const save = (b: Branch) => {
-    setRows((prev) => prev.find((x) => x.id === b.id) ? prev.map((x) => (x.id === b.id ? b : x)) : [b, ...prev]);
-    setOpen(false); setEditing(null);
-  };
+  const deactivate = useMutation({
+    mutationFn: (id: number) => (isPartner ? partnerDeactivateBranch(id) : adminDeactivateBranch(id)),
+    onSuccess: refresh,
+  });
+  const sync = useMutation({
+    mutationFn: (id: number) => adminSyncBranchAugmont(id),
+    onSuccess: refresh,
+  });
 
   return (
-    <AppShell title="Branches" subtitle="Last-mile branches operating across the network">
+    <AppShell title="Branches" subtitle={isPartner ? "Your alliance's branches" : "All branches across the network"}>
       <PageToolbar>
-        <div className="flex items-center gap-2 px-3 h-10 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 w-72">
-          <Search size={14} className="text-foreground/50" />
-          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, city, ID…" className="bg-transparent outline-none text-sm flex-1" />
+        <div className="flex items-center gap-2 px-3 h-10 rounded-lg border border-border bg-background w-80">
+          <Search size={14} className="text-text-secondary" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name or city…" className="bg-transparent outline-none text-sm flex-1" />
         </div>
-        <select value={status} onChange={(e) => setStatus(e.target.value)} className="h-10 px-3 rounded-sm border border-[color:var(--color-border)] bg-[color:var(--emerald-forest)]/40 text-sm">
-          {["All", "Live", "Setup", "Paused"].map((r) => <option key={r}>{r}</option>)}
-        </select>
         <div className="flex-1" />
-        <button onClick={() => { setEditing(null); setOpen(true); }} className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2">
-          <Plus size={14} /> Create Branch
-        </button>
+        {/* Create is a PARTNER action only — admin oversees but does not create. */}
+        {isPartner && (
+          <button
+            onClick={() => setCreating(true)}
+            className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold inline-flex items-center gap-2 hover:bg-brand-gold-rich transition-colors"
+          >
+            <Plus size={14} /> Create Branch
+          </button>
+        )}
       </PageToolbar>
 
-      <div className="glass-card rounded-md overflow-hidden">
+      <Card className="overflow-hidden">
         <table className="w-full text-sm">
-          <thead className="bg-[color:var(--emerald-forest)]/60 text-[10px] uppercase tracking-[0.22em] text-foreground/65">
+          <thead className="bg-brand-green-secondary/20 text-[10px] uppercase tracking-[0.22em] text-text-secondary">
             <tr>
               <th className="text-left px-4 py-3">Branch</th>
-              <th className="text-left px-4 py-3">Partner</th>
+              {isAdmin && <th className="text-left px-4 py-3">Partner</th>}
               <th className="text-left px-4 py-3">Location</th>
-              <th className="text-left px-4 py-3">Manager</th>
-              <th className="text-right px-4 py-3">Orders</th>
+              <th className="text-left px-4 py-3">Contact</th>
+              <th className="text-left px-4 py-3">Augmont</th>
               <th className="text-left px-4 py-3">Status</th>
               <th className="px-4 py-3"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[color:var(--color-border)]">
-            {filtered.map((b) => (
-              <tr key={b.id} className="hover:bg-white/[0.02]">
-                <td className="px-4 py-3"><div>{b.name}</div><div className="text-[10px] text-foreground/55">{b.id}</div></td>
-                <td className="px-4 py-3">{b.partner}</td>
-                <td className="px-4 py-3">{b.city}, {b.state}</td>
-                <td className="px-4 py-3">{b.manager}</td>
-                <td className="px-4 py-3 text-right text-gold">{b.orders.toLocaleString("en-IN")}</td>
-                <td className="px-4 py-3"><StatusPill status={b.status} /></td>
-                <td className="px-4 py-3 text-right">
-                  <button onClick={() => { setEditing(b); setOpen(true); }} className="text-gold/80 hover:text-gold inline-flex items-center gap-1 text-xs"><Pencil size={12} /> Edit</button>
+          <tbody className="divide-y divide-border">
+            {isLoading && <tr><td colSpan={7} className="px-4 py-8 text-center text-text-secondary">Loading branches…</td></tr>}
+            {isError && <tr><td colSpan={7} className="px-4 py-8 text-center text-red-600">{error instanceof Error ? error.message : "Failed to load"}</td></tr>}
+            {!isLoading && !isError && rows.length === 0 && (
+              <tr><td colSpan={7} className="px-4 py-8 text-center text-text-secondary">
+                {isPartner ? "No branches yet. Create your first one." : "No branches in the network."}
+              </td></tr>
+            )}
+            {rows.map((b) => (
+              <tr key={b.id} className="hover:bg-bg-section">
+                <td className="px-4 py-3"><div>{b.name}</div><div className="text-[10px] text-text-secondary">{b.code ?? ""}</div></td>
+                {isAdmin && <td className="px-4 py-3">{b.allianceCompanyName ?? "—"}</td>}
+                <td className="px-4 py-3">{[b.city, b.state].filter(Boolean).join(", ") || "—"}</td>
+                <td className="px-4 py-3">
+                  <div>{b.contactEmail ?? "—"}</div>
+                  <div className="text-[10px] text-text-secondary">{b.contactPhone ?? ""}</div>
+                </td>
+                <td className="px-4 py-3">
+                  {b.syncedToAugmont
+                    ? <span className="text-[10px] text-green-700">store #{b.augmontStoreId}</span>
+                    : <span className="text-[10px] text-text-secondary/60">not synced</span>}
+                </td>
+                <td className="px-4 py-3"><StatusPill status={b.isActive ? "Active" : "Paused"} /></td>
+                <td className="px-4 py-3 text-right whitespace-nowrap">
+                  <button onClick={() => setEditing(b)} className="text-gold/90 hover:text-gold inline-flex items-center gap-1 text-xs text-brand-gold-premium"><Pencil size={12} /> Edit</button>
+                  {isPartner && b.isActive && (
+                    <button onClick={() => setManagerFor(b)} className="ml-3 text-xs text-brand-green-primary hover:underline inline-flex items-center gap-1"><UserPlus size={12} /> Add Manager</button>
+                  )}
+                  {isAdmin && !b.syncedToAugmont && (
+                    <button onClick={() => sync.mutate(b.id)} disabled={sync.isPending} className="ml-3 text-xs text-brand-green-primary hover:underline disabled:opacity-50">Sync</button>
+                  )}
+                  {b.isActive && (
+                    <button onClick={() => deactivate.mutate(b.id)} disabled={deactivate.isPending} className="ml-3 text-xs text-red-600 hover:underline disabled:opacity-50">Deactivate</button>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
+      </Card>
 
-      {open && <BranchDialog initial={editing} onSave={save} onClose={() => { setOpen(false); setEditing(null); }} />}
+      {(creating || editing) && (
+        <BranchDialog
+          isPartner={isPartner}
+          initial={editing}
+          onClose={() => { setCreating(false); setEditing(null); }}
+          onSaved={() => { setCreating(false); setEditing(null); refresh(); }}
+        />
+      )}
+
+      {managerFor && (
+        <ManagerDialog
+          branch={managerFor}
+          onClose={() => setManagerFor(null)}
+          onSaved={() => { setManagerFor(null); refresh(); }}
+        />
+      )}
     </AppShell>
   );
 }
 
-function BranchDialog({ initial, onSave, onClose }: { initial: Branch | null; onSave: (b: Branch) => void; onClose: () => void }) {
-  const [form, setForm] = useState<Branch>(
-    initial ?? { id: `B-${Math.floor(50000 + Math.random() * 9999)}`, name: "", partner: partners[0].name, city: "", state: "", manager: "", orders: 0, status: "Setup" },
-  );
+const i = "w-full h-10 px-3 rounded-lg bg-background border border-border outline-none focus:border-brand-gold-premium text-sm";
+
+function BranchDialog({ isPartner, initial, onClose, onSaved }: {
+  isPartner: boolean;
+  initial: Branch | null;
+  onClose: () => void;
+  onSaved: () => void;
+}) {
+  const [form, setForm] = useState<CreateBranchInput>({
+    name: initial?.name ?? "",
+    code: initial?.code ?? "",
+    contactEmail: initial?.contactEmail ?? "",
+    contactPhone: initial?.contactPhone ?? "",
+    city: initial?.city ?? "",
+    state: initial?.state ?? "",
+    pincode: initial?.pincode ?? "",
+    commissionRate: initial?.commissionRate ?? undefined,
+  });
+  const [err, setErr] = useState("");
+
+  const save = useMutation({
+    mutationFn: () => {
+      const body: CreateBranchInput = {
+        ...form,
+        code: form.code || undefined,
+        contactEmail: form.contactEmail || undefined,
+        contactPhone: form.contactPhone || undefined,
+        city: form.city || undefined,
+        state: form.state || undefined,
+        pincode: form.pincode || undefined,
+      };
+      if (initial) {
+        return isPartner ? partnerUpdateBranch(initial.id, body) : adminUpdateBranch(initial.id, body);
+      }
+      // Create is partner-only (admin has no create button).
+      return partnerCreateBranch(body);
+    },
+    onSuccess: onSaved,
+    onError: (e) => setErr(e instanceof Error ? e.message : "Failed to save branch"),
+  });
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
-      <div className="glass-card rounded-md w-full max-w-lg p-6 bg-[color:var(--emerald-forest)]">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 overflow-y-auto">
+      <Card className="w-full max-w-lg p-6 bg-background my-8">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-display text-2xl">{initial ? "Edit Branch" : "Create Branch"}</h3>
-          <button onClick={onClose} className="text-foreground/60 hover:text-foreground"><X size={18} /></button>
+          <h3 className="font-display text-2xl text-brand-green-primary">{initial ? "Edit Branch" : "Create Branch"}</h3>
+          <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
         </div>
-        <form onSubmit={(e) => { e.preventDefault(); onSave(form); }} className="grid grid-cols-2 gap-3">
+        <form onSubmit={(e) => { e.preventDefault(); setErr(""); save.mutate(); }} className="grid grid-cols-2 gap-3">
           <Field label="Branch Name" full><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
-          <Field label="Partner" full>
-            <select value={form.partner} onChange={(e) => setForm({ ...form, partner: e.target.value })} className={i}>
-              {partners.map((p) => <option key={p.id}>{p.name}</option>)}
-            </select>
-          </Field>
-          <Field label="City"><input required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={i} /></Field>
-          <Field label="State"><input required value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} className={i} /></Field>
-          <Field label="Branch Manager" full><input value={form.manager} onChange={(e) => setForm({ ...form, manager: e.target.value })} className={i} /></Field>
-          <Field label="Status">
-            <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as Branch["status"] })} className={i}>
-              {["Live", "Setup", "Paused"].map((r) => <option key={r}>{r}</option>)}
-            </select>
-          </Field>
-          <Field label="Orders"><input type="number" value={form.orders} onChange={(e) => setForm({ ...form, orders: +e.target.value })} className={i} /></Field>
+          <Field label="Code"><input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className={i} /></Field>
+          <Field label="Commission %"><input type="number" step="0.01" min="0" max="100" value={form.commissionRate ?? ""} onChange={(e) => setForm({ ...form, commissionRate: e.target.value === "" ? undefined : Number(e.target.value) })} className={i} /></Field>
+          <Field label="Contact Email"><input type="email" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} className={i} /></Field>
+          <Field label="Contact Phone"><input value={form.contactPhone} onChange={(e) => setForm({ ...form, contactPhone: e.target.value })} className={i} /></Field>
+          <Field label="City"><input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={i} /></Field>
+          <Field label="State"><input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} className={i} /></Field>
+          <Field label="Pincode"><input value={form.pincode} onChange={(e) => setForm({ ...form, pincode: e.target.value })} className={i} /></Field>
+
+          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</div>}
+
           <div className="col-span-2 flex justify-end gap-2 mt-2">
-            <button type="button" onClick={onClose} className="h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] border border-[color:var(--color-border)]">Cancel</button>
-            <button type="submit" className="btn-gold h-10 px-4 rounded-sm text-xs uppercase tracking-[0.18em] font-semibold">{initial ? "Save Changes" : "Create"}</button>
+            <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>
+            <button type="submit" disabled={save.isPending} className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold hover:bg-brand-gold-rich transition-colors disabled:opacity-60">
+              {save.isPending ? "Saving…" : initial ? "Save Changes" : "Create"}
+            </button>
           </div>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
 
-const i = "w-full h-10 px-3 rounded-sm bg-[color:var(--emerald-deep)] border border-[color:var(--color-border)] outline-none focus:border-[color:var(--color-gold)]/70 text-sm";
+function ManagerDialog({ branch, onClose, onSaved }: { branch: Branch; onClose: () => void; onSaved: () => void }) {
+  const [form, setForm] = useState<BranchManagerInput>({ firstName: "", lastName: "", email: "", mobile: "" });
+  const [err, setErr] = useState("");
+
+  const save = useMutation({
+    mutationFn: () => partnerCreateBranchManager(branch.id, {
+      ...form,
+      lastName: form.lastName || undefined,
+    }),
+    onSuccess: onSaved,
+    onError: (e) => setErr(e instanceof Error ? e.message : "Failed to invite manager"),
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4 overflow-y-auto">
+      <Card className="w-full max-w-md p-6 bg-background my-8">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="font-display text-2xl text-brand-green-primary">Add Branch Manager</h3>
+          <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
+        </div>
+        <p className="text-xs text-text-secondary mb-4">
+          Invites a manager login for <span className="font-semibold text-brand-green-primary">{branch.name}</span>.
+          A secure link is emailed for them to set their own password — no password is sent.
+        </p>
+        <form onSubmit={(e) => { e.preventDefault(); setErr(""); save.mutate(); }} className="grid grid-cols-2 gap-3">
+          <Field label="First Name"><input required value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} className={i} /></Field>
+          <Field label="Last Name"><input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} className={i} /></Field>
+          <Field label="Email" full><input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={i} /></Field>
+          <Field label="Mobile" full><input required value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} className={i} placeholder="10-digit, starts 6-9" /></Field>
+
+          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</div>}
+
+          <div className="col-span-2 flex justify-end gap-2 mt-2">
+            <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>
+            <button type="submit" disabled={save.isPending} className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold hover:bg-brand-gold-rich transition-colors disabled:opacity-60">
+              {save.isPending ? "Inviting…" : "Invite & Send Link"}
+            </button>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
+}
+
 function Field({ label, children, full }: { label: string; children: React.ReactNode; full?: boolean }) {
-  return <label className={`block ${full ? "col-span-2" : ""}`}><span className="text-[10px] uppercase tracking-[0.22em] text-foreground/65">{label}</span><div className="mt-1.5">{children}</div></label>;
+  return <label className={`block ${full ? "col-span-2" : ""}`}><span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">{label}</span><div className="mt-1.5">{children}</div></label>;
 }

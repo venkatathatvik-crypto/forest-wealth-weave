@@ -1,42 +1,54 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth, type Role } from "@/lib/mock/auth";
+import { getNewLeadCount } from "@/lib/api/admin";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 import {
   LayoutDashboard, Users, Coins, ShoppingCart, FileBarChart2,
   Building2, LogOut, Bell, Search, Settings as SettingsIcon,
-  User, HelpCircle,
+  User, HelpCircle, Handshake, Inbox,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
-type NavItem = { to: string; search?: Record<string, unknown>; label: string; icon: typeof Users; roles: Role[] };
+type NavItem = {
+  to: string;
+  search?: Record<string, unknown>;
+  label: string;
+  icon: typeof Users;
+  roles: Role[];
+  /** When set, a count badge for this key is shown (currently "leads"). */
+  badge?: "leads";
+};
 
 const NAV: NavItem[] = [
   { to: "/dashboard/admin", label: "Admin Console", icon: LayoutDashboard, roles: ["admin"] },
   { to: "/dashboard/partner", label: "Partner Console", icon: LayoutDashboard, roles: ["partner"] },
   { to: "/dashboard/branch", label: "Branch Console", icon: LayoutDashboard, roles: ["branch"] },
   { to: "/dashboard/customer", label: "Dashboard", icon: LayoutDashboard, roles: ["customer"] },
+  { to: "/admin/leads", label: "Leads", icon: Inbox, roles: ["admin"], badge: "leads" },
+  { to: "/admin/partners", label: "Partners", icon: Handshake, roles: ["admin"] },
+  { to: "/branches", label: "Branches", icon: Building2, roles: ["admin", "partner"] },
   { to: "/customers", label: "Customers", icon: Users, roles: ["admin", "partner", "branch"] },
   { to: "/gold-products", label: "Gold Products", icon: Coins, roles: ["admin", "partner", "branch", "customer"] },
   { to: "/orders", label: "Orders", icon: ShoppingCart, roles: ["admin", "partner", "branch"] },
   { to: "/orders", label: "My Orders", icon: ShoppingCart, roles: ["customer"] },
   { to: "/reports", label: "Reports", icon: FileBarChart2, roles: ["admin", "partner"] },
-  { to: "/branches", label: "Branches", icon: Building2, roles: ["admin", "partner"] },
   { to: "/settings", search: { tab: "profile" }, label: "Profile", icon: User, roles: ["customer"] },
   { to: "/contact", label: "Support", icon: HelpCircle, roles: ["customer"] },
   { to: "/settings", label: "Settings", icon: SettingsIcon, roles: ["admin", "partner", "branch", "customer"] },
 ];
 
-// Map the stored role (which may be a raw backend role like "ROLE_SUPER_ADMIN"
-// after a real login, or a legacy mock role for demo logins) to the nav's Role.
+// Map the stored role (which may be a raw backend role like "ROLE_ADMIN" after a
+// real login, or a legacy mock role for demo logins) to the nav's Role.
 function toNavRole(raw: string | undefined): Role {
   switch (raw) {
-    case "ROLE_SUPER_ADMIN":
+    case "ROLE_ADMIN":
     case "admin":
       return "admin";
-    case "ROLE_ALLIANCE_ADMIN":
+    case "ROLE_ALLIANCE":
     case "partner":
       return "partner";
-    case "ROLE_BRANCH_MANAGER":
+    case "ROLE_BRANCH":
     case "ROLE_AGENT":
     case "branch":
       return "branch";
@@ -54,6 +66,15 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const role: Role = toNavRole(user?.role);
   const items = NAV.filter((n) => n.roles.includes(role));
+
+  // Pending-leads badge (admin only). Refetched periodically so it stays fresh.
+  const { data: leadCount } = useQuery({
+    queryKey: ["admin", "leads-new-count"],
+    queryFn: () => getNewLeadCount(),
+    enabled: role === "admin",
+    refetchInterval: 60_000,
+  });
+  const newLeads = leadCount?.count ?? 0;
 
   // Clear session AND leave the dashboard — without the redirect the page stays
   // on /dashboard/* (role falls back to "admin"), so it looks like nothing happened.
@@ -124,6 +145,11 @@ export function AppShell({ children, title, subtitle }: { children: ReactNode; t
                 >
                   <Icon size={16} />
                   <span>{n.label}</span>
+                  {n.badge === "leads" && newLeads > 0 && (
+                    <span className="ml-auto min-w-5 h-5 px-1.5 grid place-items-center rounded-full bg-brand-gold-premium text-brand-green-primary text-[10px] font-bold">
+                      {newLeads > 99 ? "99+" : newLeads}
+                    </span>
+                  )}
                 </Link>
               );
             })}

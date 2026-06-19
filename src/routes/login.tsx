@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { useAuth, type Role } from "@/lib/mock/auth";
+import { submitPartnerLead } from "@/lib/api/public";
 import logoAsset from "@/assets/fortune-alliances-logo.png.asset.json";
 import { Shield, Briefcase, Building2, User, CheckCircle2, X } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -40,6 +41,9 @@ function LoginPage() {
   const [successMsg, setSuccessMsg] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Roles that authenticate against the real backend (vs. mock demo login).
+  const usesBackend = role === "admin" || role === "partner" || role === "branch";
 
   // Registration Forms State
   const [customerForm, setCustomerForm] = useState({ name: "", phone: "", email: "", city: "", state: "" });
@@ -81,8 +85,17 @@ function LoginPage() {
     e.preventDefault();
     setError("");
 
-    // Admin authenticates against the real backend; other roles use mock demo login.
-    if (role === "admin") {
+    // Admin, Partner and Branch authenticate against the real backend. The selected
+    // role must match the account's actual role (enforced in loginWithPassword/Otp),
+    // otherwise login is rejected. Customer remains a mock demo login for now.
+    const dashboardFor: Record<Role, string> = {
+      admin: "/dashboard/admin",
+      partner: "/dashboard/partner",
+      branch: "/dashboard/branch",
+      customer: "/dashboard/customer",
+    };
+
+    if (role === "admin" || role === "partner" || role === "branch") {
       setLoading(true);
       try {
         if (authMethod === "otp") {
@@ -93,11 +106,11 @@ function LoginPage() {
             setInfo(`A 6-digit code was sent to ${email}. Enter it below.`);
             return;
           }
-          await loginWithOtp(email, otp);
+          await loginWithOtp(email, otp, role);
         } else {
-          await loginWithPassword(email, password);
+          await loginWithPassword(email, password, role);
         }
-        nav({ to: "/dashboard/admin" });
+        nav({ to: dashboardFor[role] });
       } catch (err) {
         setError(err instanceof Error ? err.message : "Login failed");
       } finally {
@@ -107,7 +120,7 @@ function LoginPage() {
     }
 
     login(email, role);
-    nav({ to: role === "partner" ? "/dashboard/partner" : role === "branch" ? "/dashboard/branch" : "/dashboard/customer" });
+    nav({ to: dashboardFor[role] });
   };
 
   const handleRegisterCustomer = (e: React.FormEvent) => {
@@ -115,9 +128,26 @@ function LoginPage() {
     setSuccessMsg("Registration request received! Our Relationship Manager will contact you soon to complete documents verification and activate your gold account.");
   };
 
-  const handleRegisterPartner = (e: React.FormEvent) => {
+  const handleRegisterPartner = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccessMsg("Partner agreement registered! Our regional enablement team will contact you soon to verify your GST and finalize onboarding agreements.");
+    setError("");
+    setLoading(true);
+    try {
+      await submitPartnerLead({
+        companyName: partnerForm.companyName,
+        contactPerson: partnerForm.contactPerson,
+        email: partnerForm.email,
+        phone: partnerForm.phone,
+        gst: partnerForm.gst,
+        city: partnerForm.city,
+        state: partnerForm.state,
+      });
+      setSuccessMsg("Partner request received! Our regional enablement team will contact you soon to verify your GST and finalize onboarding agreements.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to submit request");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const pickRole = (r: Role) => {
@@ -175,8 +205,8 @@ function LoginPage() {
               </div>
               <p className="text-xs text-text-secondary mb-6 text-center">{ROLES.find((r) => r.id === role)!.desc}</p>
 
-              {/* Admin-only: choose password or email OTP */}
-              {role === "admin" && (
+              {/* Backend roles: choose password or email OTP */}
+              {usesBackend && (
                 <div className="grid grid-cols-2 gap-2 mb-4 p-1 rounded-lg bg-bg-section border border-border">
                   {(["password", "otp"] as const).map((m) => (
                     <button
@@ -201,16 +231,16 @@ function LoginPage() {
                   <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
                 </label>
 
-                {/* Password method (non-admin roles always use this field) */}
-                {!(role === "admin" && authMethod === "otp") && (
+                {/* Password method (also the field for customer mock login) */}
+                {!(usesBackend && authMethod === "otp") && (
                   <label className="block">
                     <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Password</span>
                     <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
                   </label>
                 )}
 
-                {/* OTP method (admin) */}
-                {role === "admin" && authMethod === "otp" && (
+                {/* OTP method (backend roles) */}
+                {usesBackend && authMethod === "otp" && (
                   <div className="space-y-3">
                     <button
                       type="button"
@@ -250,21 +280,23 @@ function LoginPage() {
 
               <button
                 type="submit"
-                disabled={loading || (role === "admin" && authMethod === "otp" && otpSent && otp.length !== 6)}
+                disabled={loading || (usesBackend && authMethod === "otp" && otpSent && otp.length !== 6)}
                 className="mt-6 w-full h-11 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs font-semibold uppercase tracking-[0.22em] hover:bg-brand-gold-rich transition-colors disabled:opacity-60"
               >
                 {loading
                   ? "Please wait…"
-                  : role === "admin" && authMethod === "otp" && !otpSent
+                  : usesBackend && authMethod === "otp" && !otpSent
                     ? "Send OTP"
-                    : role === "admin" && authMethod === "otp"
+                    : usesBackend && authMethod === "otp"
                       ? "Verify & Enter"
                       : "Enter Console"}
               </button>
               <p className="text-[11px] text-text-secondary mt-4 text-center">
                 {role === "admin"
-                  ? "Admin signs in against the live backend. Demo admin: admin@goldemi.com / Admin@123"
-                  : "Demo environment — partner / branch / customer roles are not validated."}
+                  ? "Signs in against the live backend. Demo admin: admin@goldemi.com / Admin@123"
+                  : usesBackend
+                    ? "Signs in against the live backend with your issued credentials."
+                    : "Demo environment — the customer role is not validated."}
               </p>
             </form>
           )}
@@ -339,8 +371,14 @@ function LoginPage() {
                 </label>
               </div>
 
-              <button type="submit" className="w-full mt-6 h-11 bg-brand-green-primary text-white font-semibold text-xs uppercase tracking-[0.22em] rounded-lg hover:bg-brand-green-secondary transition-colors">
-                Apply as Partner
+              {error && (
+                <p className="text-[12px] text-red-600 mt-2 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">
+                  {error}
+                </p>
+              )}
+
+              <button type="submit" disabled={loading} className="w-full mt-6 h-11 bg-brand-green-primary text-white font-semibold text-xs uppercase tracking-[0.22em] rounded-lg hover:bg-brand-green-secondary transition-colors disabled:opacity-60">
+                {loading ? "Submitting…" : "Apply as Partner"}
               </button>
             </form>
           )}

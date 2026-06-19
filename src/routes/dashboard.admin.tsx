@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatCard } from "@/components/dashboard/widgets";
 import { Card } from "@/components/ui/card";
 import { Handshake, Building2, Users, ShoppingCart, Coins } from "lucide-react";
 import { partners, branches, customers, orders, activity, inr } from "@/lib/mock/data";
+import { getAdminDashboard } from "@/lib/api/admin";
 import { DashboardPreview } from "@/components/site/DashboardPreview";
 
 export const Route = createFileRoute("/dashboard/admin")({
@@ -12,11 +14,17 @@ export const Route = createFileRoute("/dashboard/admin")({
 });
 
 function AdminDashboard() {
+  // Partners & Branches counts come from the real backend; the rest stays sample data.
+  const { data: stats } = useQuery({
+    queryKey: ["admin", "dashboard"],
+    queryFn: () => getAdminDashboard(),
+  });
+
   return (
     <AppShell title="Network Overview" subtitle="Operational workspace · Fortune Alliance network · sample data shown until backend integration">
       <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <StatCard label="Partners" value={String(partners.length)} delta="Sample data" icon={<Handshake size={16} />} />
-        <StatCard label="Branches" value={String(branches.length)} delta="Sample data" icon={<Building2 size={16} />} />
+        <StatCard label="Partners" value={stats ? String(stats.totalAlliances) : "…"} delta={stats ? `${stats.activeAlliances} active` : "Live"} icon={<Handshake size={16} />} />
+        <StatCard label="Branches" value={stats ? String(stats.totalBranches) : "…"} delta={stats ? `${stats.activeBranches} active` : "Live"} icon={<Building2 size={16} />} />
         <StatCard label="Customers" value={String(customers.length)} delta="Sample data" icon={<Users size={16} />} />
         <StatCard label="Orders" value={String(orders.length)} delta="Sample data" icon={<ShoppingCart size={16} />} />
         <StatCard label="Gold Volume" value="—" delta="Awaiting Augmont API" icon={<Coins size={16} />} />

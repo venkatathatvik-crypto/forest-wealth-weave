@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/dashboard/AppShell";
 import { StatCard } from "@/components/dashboard/widgets";
 import { Card } from "@/components/ui/card";
 import { Building2, ShoppingCart, IndianRupee, Activity } from "lucide-react";
 import { branches, orders } from "@/lib/mock/data";
+import { partnerListBranches } from "@/lib/api/branches";
 import { DistributionChart } from "@/components/dashboard/DistributionChart";
 
 const distributionSeries = [
@@ -27,10 +29,16 @@ export const Route = createFileRoute("/dashboard/partner")({
 });
 
 function PartnerDashboard() {
+  // Real count of this partner's own branches; the rest stays sample data.
+  const { data: branchPage } = useQuery({
+    queryKey: ["partner", "branches-count"],
+    queryFn: () => partnerListBranches({ size: 1 }),
+  });
+
   return (
     <AppShell title="Partner Console" subtitle="Meridian Capital Partners · Western region · sample data until backend integration">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard label="My Branches" value={String(branches.length)} delta="Sample data" icon={<Building2 size={16} />} />
+        <StatCard label="My Branches" value={branchPage ? String(branchPage.totalItems) : "…"} delta={branchPage ? "Live" : ""} icon={<Building2 size={16} />} />
         <StatCard label="Orders" value={String(orders.length)} delta="Sample data" icon={<ShoppingCart size={16} />} />
         <StatCard label="Revenue Overview" value="—" delta="Awaiting backend" icon={<IndianRupee size={16} />} />
         <StatCard label="Performance" value="—" delta="Awaiting backend" icon={<Activity size={16} />} />

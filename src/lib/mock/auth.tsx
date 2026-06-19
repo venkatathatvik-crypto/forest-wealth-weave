@@ -4,9 +4,21 @@ import { getAccessToken } from "@/lib/api/client";
 import type { BackendUser } from "@/lib/api/types";
 
 // Legacy mock role union — still used by pages that branch on a friendly role
-// string (partner/branch/customer demo paths). The admin path now authenticates
-// against the real backend, where the role is the raw "ROLE_SUPER_ADMIN" string.
+// string (partner/branch/customer demo paths). Real logins carry the raw backend
+// role (e.g. "ROLE_ALLIANCE"); use backendRoleToMockRole to normalise.
 export type Role = "admin" | "partner" | "branch" | "customer";
+
+/** Map a raw backend role to the frontend's mock Role (null if unrecognised). */
+export function backendRoleToMockRole(raw: string | null | undefined): Role | null {
+  switch (raw) {
+    case "ROLE_ADMIN": return "admin";
+    case "ROLE_ALLIANCE": return "partner";
+    case "ROLE_BRANCH":
+    case "ROLE_AGENT": return "branch";
+    case "ROLE_CUSTOMER": return "customer";
+    default: return null;
+  }
+}
 
 export type User = {
   email: string;
@@ -21,12 +33,16 @@ type AuthCtx = {
   backendUser: BackendUser | null;
   /** Demo/mock login used by the partner/branch/customer role buttons. */
   login: (email: string, role: Role) => User;
-  /** Real backend login (email/mobile + password). Throws on failure. */
-  loginWithPassword: (identifier: string, password: string) => Promise<User>;
+  /**
+   * Real backend login (email/mobile + password). Throws on failure.
+   * If {@link expectedRole} is given and the account's role doesn't match, the
+   * login is rejected (no session established) with an "Invalid credentials" error.
+   */
+  loginWithPassword: (identifier: string, password: string, expectedRole?: Role) => Promise<User>;
   /** Send a login OTP to the given email/mobile. Throws on failure. */
   requestOtp: (identifier: string) => Promise<void>;
-  /** Verify the OTP and log in. Throws on failure. */
-  loginWithOtp: (identifier: string, otp: string) => Promise<User>;
+  /** Verify the OTP and log in. Optional role guard like loginWithPassword. */
+  loginWithOtp: (identifier: string, otp: string, expectedRole?: Role) => Promise<User>;
   logout: () => void;
 };
 
@@ -85,7 +101,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Apply an authenticated backend user to context (shared by password & OTP login).
-  const applyBackendUser = (bu: BackendUser): User => {
+  // If expectedRole is given and the account's role differs, reject: clear the
+  // just-issued tokens and throw a generic "Invalid credentials" (no impersonation).
+  const applyBackendUser = (bu: BackendUser, expectedRole?: Role): User => {
+    if (expectedRole && backendRoleToMockRole(bu.role) !== expectedRole) {
+      authApi.clearTokens();
+      throw new Error("Invalid credentials");
+    }
     const u: User = { email: bu.email ?? bu.mobile, name: displayName(bu), role: bu.role };
     // Don't persist a mock user when we have a real session (tokens drive restore).
     localStorage.removeItem(KEY);
@@ -95,16 +117,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   // Real backend login (password).
-  const loginWithPassword = async (identifier: string, password: string) => {
+  const loginWithPassword = async (identifier: string, password: string, expectedRole?: Role) => {
     const res = await authApi.login(identifier, password);
-    return applyBackendUser(res.user);
+    return applyBackendUser(res.user, expectedRole);
   };
 
   // OTP login — request the code, then verify it.
   const requestOtp = (identifier: string) => authApi.sendOtp(identifier);
-  const loginWithOtp = async (identifier: string, otp: string) => {
+  const loginWithOtp = async (identifier: string, otp: string, expectedRole?: Role) => {
     const res = await authApi.verifyLoginOtp(identifier, otp);
-    return applyBackendUser(res.user);
+    return applyBackendUser(res.user, expectedRole);
   };
 
   const logout = () => {
