@@ -20,6 +20,10 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    // Frontend is served under /gold-emi-app (Nginx routes that prefix to the
+    // Nitro server). Vite generates asset URLs under this base; the TanStack
+    // Router basepath in src/router.tsx must match.
+    base: "/gold-emi-app/",
     server: {
       // 5173 so the frontend dev server doesn't collide with the backend on 8080.
       port: 5173,

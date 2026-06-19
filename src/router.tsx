@@ -7,6 +7,8 @@ export const getRouter = () => {
 
   const router = createRouter({
     routeTree,
+    // Served under /gold-emi-app (must match Vite `base` and the Nginx route).
+    basepath: "/gold-emi-app",
     context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
