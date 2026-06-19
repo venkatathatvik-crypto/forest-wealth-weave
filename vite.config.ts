@@ -7,6 +7,13 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // Explicitly enable the Nitro deploy plugin targeting a Node server, so
+  // `vite build` emits a runnable standalone server at .output/server/index.mjs
+  // (run with PM2). Without this, outside a Lovable sandbox the wrapper skips
+  // Nitro, and its sandbox default targets Cloudflare — neither is runnable on
+  // our Node/PM2 + Nginx server.
+  nitro: { preset: "node-server" },
+
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
