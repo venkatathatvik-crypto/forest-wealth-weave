@@ -125,6 +125,17 @@ function LoginPage() {
 
   const handleRegisterCustomer = (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    if (
+      !customerForm.name.trim() ||
+      !customerForm.phone.trim() ||
+      !customerForm.email.trim() ||
+      !customerForm.city.trim() ||
+      !customerForm.state.trim()
+    ) {
+      setError("All fields are required");
+      return;
+    }
     setSuccessMsg("Registration request received! Our Relationship Manager will contact you soon to complete documents verification and activate your gold account.");
   };
 
@@ -228,7 +239,7 @@ function LoginPage() {
               <div className="space-y-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Work Email</span>
-                  <input value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
+                  <input value={email} onChange={(e) => setEmail(e.target.value.trim())} className="mt-1.5 w-full h-11 px-4 rounded-lg bg-white border border-border outline-none focus:border-brand-green-primary focus:ring-1 focus:ring-brand-green-primary text-sm text-text-primary" />
                 </label>
 
                 {/* Password method (also the field for customer mock login) */}
@@ -273,7 +284,7 @@ function LoginPage() {
                 </p>
               )}
               {error && (
-                <p className="text-[12px] text-red-600 mt-4 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">
+                <p className="text-[12px] text-red-600 mt-4 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">
                   {error}
                 </p>
               )}
@@ -305,26 +316,26 @@ function LoginPage() {
             <form onSubmit={handleRegisterCustomer} className="space-y-4">
               <label className="block">
                 <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Full Name</span>
-                <input required value={customerForm.name} onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                <input value={customerForm.name} onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Mobile Number</span>
-                  <input required type="tel" value={customerForm.phone} onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input type="tel" value={customerForm.phone} onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Email Address</span>
-                  <input required type="email" value={customerForm.email} onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input type="email" value={customerForm.email} onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">City</span>
-                  <input required value={customerForm.city} onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={customerForm.city} onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">State</span>
-                  <input required value={customerForm.state} onChange={(e) => setCustomerForm({ ...customerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={customerForm.state} onChange={(e) => setCustomerForm({ ...customerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
               </div>
               
@@ -338,41 +349,41 @@ function LoginPage() {
             <form onSubmit={handleRegisterPartner} className="space-y-4">
               <label className="block">
                 <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Company Name</span>
-                <input required value={partnerForm.companyName} onChange={(e) => setPartnerForm({ ...partnerForm, companyName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                <input value={partnerForm.companyName} onChange={(e) => setPartnerForm({ ...partnerForm, companyName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
               </label>
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Contact Person</span>
-                  <input required value={partnerForm.contactPerson} onChange={(e) => setPartnerForm({ ...partnerForm, contactPerson: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={partnerForm.contactPerson} onChange={(e) => setPartnerForm({ ...partnerForm, contactPerson: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">GST Number</span>
-                  <input required value={partnerForm.gst} onChange={(e) => setPartnerForm({ ...partnerForm, gst: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={partnerForm.gst} onChange={(e) => setPartnerForm({ ...partnerForm, gst: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Mobile Phone</span>
-                  <input required type="tel" value={partnerForm.phone} onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input type="tel" value={partnerForm.phone} onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">Work Email</span>
-                  <input required type="email" value={partnerForm.email} onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input type="email" value={partnerForm.email} onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">City</span>
-                  <input required value={partnerForm.city} onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={partnerForm.city} onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
                 <label className="block">
                   <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary font-medium">State</span>
-                  <input required value={partnerForm.state} onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                  <input value={partnerForm.state} onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                 </label>
               </div>
 
               {error && (
-                <p className="text-[12px] text-red-600 mt-2 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">
+                <p className="text-[12px] text-red-600 mt-2 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">
                   {error}
                 </p>
               )}

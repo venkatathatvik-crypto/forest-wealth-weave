@@ -80,6 +80,18 @@ function CustomerDialog({ onSave, onClose }: { onSave: (c: Customer) => void; on
     id: `C-${Math.floor(90000 + Math.random() * 9999)}`,
     name: "", phone: "", city: "", kyc: "Pending", branch: "B-50211", gold: 0, joined: new Date().toISOString().slice(0, 10),
   });
+  const [err, setErr] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErr("");
+    if (!form.name.trim() || !form.phone.trim() || !form.city.trim()) {
+      setErr("Name, phone, and city are required");
+      return;
+    }
+    onSave(form);
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm grid place-items-center p-4">
       <Card className="w-full max-w-lg p-6 bg-background">
@@ -87,16 +99,23 @@ function CustomerDialog({ onSave, onClose }: { onSave: (c: Customer) => void; on
           <h3 className="font-display text-2xl text-brand-green-primary">Create Customer</h3>
           <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
         </div>
-        <form onSubmit={(e) => { e.preventDefault(); onSave(form); }} className="grid grid-cols-2 gap-3">
-          <Field label="Full Name" full><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
-          <Field label="Phone"><input required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={i} /></Field>
-          <Field label="City"><input required value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={i} /></Field>
+        <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3">
+          <Field label="Full Name" full><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
+          <Field label="Phone"><input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className={i} /></Field>
+          <Field label="City"><input value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} className={i} /></Field>
           <Field label="Branch"><input value={form.branch} onChange={(e) => setForm({ ...form, branch: e.target.value })} className={i} /></Field>
           <Field label="KYC">
             <select value={form.kyc} onChange={(e) => setForm({ ...form, kyc: e.target.value as Customer["kyc"] })} className={i}>
               {["Verified", "Pending", "Rejected"].map((s) => <option key={s}>{s}</option>)}
             </select>
           </Field>
+
+          {err && (
+            <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">
+              {err}
+            </div>
+          )}
+
           <div className="col-span-2 flex justify-end gap-2 mt-2">
             <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>
             <button type="submit" className="h-10 px-4 rounded-lg bg-brand-gold-premium text-brand-green-primary text-xs uppercase tracking-[0.18em] font-semibold hover:bg-brand-gold-rich transition-colors">Create Customer</button>

@@ -201,7 +201,7 @@ function LeadDrawer({ lead, onClose, onChanged }: { lead: PartnerLead; onClose: 
           />
         </label>
 
-        {err && <p className="text-[12px] text-red-600 mt-3 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</p>}
+        {err && <p className="text-[12px] text-red-600 mt-3 bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">{err}</p>}
 
         {!isClosed && (
           <div className="mt-6 space-y-2">

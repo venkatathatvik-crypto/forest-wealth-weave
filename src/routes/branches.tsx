@@ -188,8 +188,19 @@ function BranchDialog({ isPartner, initial, onClose, onSaved }: {
           <h3 className="font-display text-2xl text-brand-green-primary">{initial ? "Edit Branch" : "Create Branch"}</h3>
           <button onClick={onClose} className="text-text-secondary hover:text-text-primary"><X size={18} /></button>
         </div>
-        <form onSubmit={(e) => { e.preventDefault(); setErr(""); save.mutate(); }} className="grid grid-cols-2 gap-3">
-          <Field label="Branch Name" full><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setErr("");
+            if (!form.name.trim()) {
+              setErr("Branch name is required");
+              return;
+            }
+            save.mutate();
+          }}
+          className="grid grid-cols-2 gap-3"
+        >
+          <Field label="Branch Name" full><input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={i} /></Field>
           <Field label="Code"><input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className={i} /></Field>
           <Field label="Commission %"><input type="number" step="0.01" min="0" max="100" value={form.commissionRate ?? ""} onChange={(e) => setForm({ ...form, commissionRate: e.target.value === "" ? undefined : Number(e.target.value) })} className={i} /></Field>
           <Field label="Contact Email"><input type="email" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })} className={i} /></Field>
@@ -198,7 +209,7 @@ function BranchDialog({ isPartner, initial, onClose, onSaved }: {
           <Field label="State"><input value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })} className={i} /></Field>
           <Field label="Pincode"><input value={form.pincode} onChange={(e) => setForm({ ...form, pincode: e.target.value })} className={i} /></Field>
 
-          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</div>}
+          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">{err}</div>}
 
           <div className="col-span-2 flex justify-end gap-2 mt-2">
             <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>
@@ -236,13 +247,24 @@ function ManagerDialog({ branch, onClose, onSaved }: { branch: Branch; onClose: 
           Invites a manager login for <span className="font-semibold text-brand-green-primary">{branch.name}</span>.
           A secure link is emailed for them to set their own password — no password is sent.
         </p>
-        <form onSubmit={(e) => { e.preventDefault(); setErr(""); save.mutate(); }} className="grid grid-cols-2 gap-3">
-          <Field label="First Name"><input required value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} className={i} /></Field>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setErr("");
+            if (!form.firstName.trim() || !form.email.trim() || !form.mobile.trim()) {
+              setErr("First name, email, and mobile are required");
+              return;
+            }
+            save.mutate();
+          }}
+          className="grid grid-cols-2 gap-3"
+        >
+          <Field label="First Name"><input value={form.firstName} onChange={(e) => setForm({ ...form, firstName: e.target.value })} className={i} /></Field>
           <Field label="Last Name"><input value={form.lastName} onChange={(e) => setForm({ ...form, lastName: e.target.value })} className={i} /></Field>
-          <Field label="Email" full><input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={i} /></Field>
-          <Field label="Mobile" full><input required value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} className={i} placeholder="10-digit, starts 6-9" /></Field>
+          <Field label="Email" full><input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className={i} /></Field>
+          <Field label="Mobile" full><input value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} className={i} placeholder="10-digit, starts 6-9" /></Field>
 
-          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</div>}
+          {err && <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">{err}</div>}
 
           <div className="col-span-2 flex justify-end gap-2 mt-2">
             <button type="button" onClick={onClose} className="h-10 px-4 rounded-lg text-xs uppercase tracking-[0.18em] border border-border">Cancel</button>

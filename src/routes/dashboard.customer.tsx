@@ -431,7 +431,6 @@ function CustomerDashboard() {
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Shipping Address</span>
                         <textarea
-                          required
                           value={formData.address}
                           onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                           placeholder="Enter complete shipping address with PIN code…"

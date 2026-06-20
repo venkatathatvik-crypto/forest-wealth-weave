@@ -114,7 +114,7 @@ function SetPasswordPage() {
               </label>
 
               {error && (
-                <p className="text-[12px] text-red-600 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">{error}</p>
+                <p className="text-[12px] text-red-600 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">{error}</p>
               )}
 
               <button

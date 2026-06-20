@@ -39,6 +39,7 @@ const unique = [
 function Index() {
   const [activeModal, setActiveModal] = useState<"" | "customer" | "partner" | "branch">("");
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [error, setError] = useState("");
 
   // Forms state
   const [customerForm, setCustomerForm] = useState({ name: "", phone: "", email: "", city: "", state: "" });
@@ -237,7 +238,7 @@ function Index() {
                 </ul>
               </div>
               <button
-                onClick={() => { setActiveModal("customer"); setFormSubmitted(false); }}
+                onClick={() => { setActiveModal("customer"); setFormSubmitted(false); setError(""); }}
                 className="mt-8 w-full h-11 rounded-lg bg-brand-gold-premium hover:bg-brand-gold-rich text-brand-green-primary font-semibold text-xs uppercase tracking-[0.2em] transition-colors"
               >
                 Apply Now
@@ -261,7 +262,7 @@ function Index() {
                 </ul>
               </div>
               <button
-                onClick={() => { setActiveModal("partner"); setFormSubmitted(false); }}
+                onClick={() => { setActiveModal("partner"); setFormSubmitted(false); setError(""); }}
                 className="mt-8 w-full h-11 rounded-lg border-2 border-brand-green-primary hover:bg-brand-green-primary hover:text-white text-brand-green-primary font-semibold text-xs uppercase tracking-[0.2em] transition-all"
               >
                 Become a Partner
@@ -285,7 +286,7 @@ function Index() {
                 </ul>
               </div>
               <button
-                onClick={() => { setActiveModal("branch"); setFormSubmitted(false); }}
+                onClick={() => { setActiveModal("branch"); setFormSubmitted(false); setError(""); }}
                 className="mt-8 w-full h-11 rounded-lg border border-border hover:border-brand-gold-premium/55 text-brand-green-primary font-semibold text-xs uppercase tracking-[0.2em] transition-all"
               >
                 Apply for Branch
@@ -330,7 +331,47 @@ function Index() {
 
             {!formSubmitted ? (
               <form
-                onSubmit={(e) => { e.preventDefault(); setFormSubmitted(true); }}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setError("");
+                  if (activeModal === "customer") {
+                    if (
+                      !customerForm.name.trim() ||
+                      !customerForm.phone.trim() ||
+                      !customerForm.email.trim() ||
+                      !customerForm.city.trim() ||
+                      !customerForm.state.trim()
+                    ) {
+                      setError("All fields are required");
+                      return;
+                    }
+                  } else if (activeModal === "partner") {
+                    if (
+                      !partnerForm.companyName.trim() ||
+                      !partnerForm.contactPerson.trim() ||
+                      !partnerForm.gst.trim() ||
+                      !partnerForm.phone.trim() ||
+                      !partnerForm.email.trim() ||
+                      !partnerForm.city.trim() ||
+                      !partnerForm.state.trim()
+                    ) {
+                      setError("All fields are required");
+                      return;
+                    }
+                  } else if (activeModal === "branch") {
+                    if (
+                      !branchForm.branchName.trim() ||
+                      !branchForm.partnerName.trim() ||
+                      !branchForm.manager.trim() ||
+                      !branchForm.phone.trim() ||
+                      !branchForm.location.trim()
+                    ) {
+                      setError("All fields are required");
+                      return;
+                    }
+                  }
+                  setFormSubmitted(true);
+                }}
                 className="space-y-4 text-left"
               >
                 {activeModal === "customer" && (
@@ -339,26 +380,26 @@ function Index() {
                     <p className="text-xs text-text-secondary text-center">Submit your details to establish a certified gold account.</p>
                     <label className="block">
                       <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Full Name</span>
-                      <input required value={customerForm.name} onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                      <input value={customerForm.name} onChange={(e) => setCustomerForm({ ...customerForm, name: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                     </label>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Mobile Number</span>
-                        <input required type="tel" value={customerForm.phone} onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input type="tel" value={customerForm.phone} onChange={(e) => setCustomerForm({ ...customerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Email Address</span>
-                        <input required type="email" value={customerForm.email} onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input type="email" value={customerForm.email} onChange={(e) => setCustomerForm({ ...customerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">City</span>
-                        <input required value={customerForm.city} onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={customerForm.city} onChange={(e) => setCustomerForm({ ...customerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">State</span>
-                        <input required value={customerForm.state} onChange={(e) => setCustomerForm({ ...customerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={customerForm.state} onChange={(e) => setCustomerForm({ ...customerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                   </>
@@ -370,36 +411,36 @@ function Index() {
                     <p className="text-xs text-text-secondary text-center">Register as a distribution or sourcing business partner.</p>
                     <label className="block">
                       <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Company Name</span>
-                      <input required value={partnerForm.companyName} onChange={(e) => setPartnerForm({ ...partnerForm, companyName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                      <input value={partnerForm.companyName} onChange={(e) => setPartnerForm({ ...partnerForm, companyName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                     </label>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Contact Person</span>
-                        <input required value={partnerForm.contactPerson} onChange={(e) => setPartnerForm({ ...partnerForm, contactPerson: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={partnerForm.contactPerson} onChange={(e) => setPartnerForm({ ...partnerForm, contactPerson: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">GST Number</span>
-                        <input required value={partnerForm.gst} onChange={(e) => setPartnerForm({ ...partnerForm, gst: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={partnerForm.gst} onChange={(e) => setPartnerForm({ ...partnerForm, gst: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Mobile Phone</span>
-                        <input required type="tel" value={partnerForm.phone} onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input type="tel" value={partnerForm.phone} onChange={(e) => setPartnerForm({ ...partnerForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Work Email</span>
-                        <input required type="email" value={partnerForm.email} onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input type="email" value={partnerForm.email} onChange={(e) => setPartnerForm({ ...partnerForm, email: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">City</span>
-                        <input required value={partnerForm.city} onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={partnerForm.city} onChange={(e) => setPartnerForm({ ...partnerForm, city: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">State</span>
-                        <input required value={partnerForm.state} onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={partnerForm.state} onChange={(e) => setPartnerForm({ ...partnerForm, state: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                   </>
@@ -412,28 +453,34 @@ function Index() {
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Branch Name / Area</span>
-                        <input required value={branchForm.branchName} onChange={(e) => setBranchForm({ ...branchForm, branchName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={branchForm.branchName} onChange={(e) => setBranchForm({ ...branchForm, branchName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Partner Name</span>
-                        <input required value={branchForm.partnerName} onChange={(e) => setBranchForm({ ...branchForm, partnerName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={branchForm.partnerName} onChange={(e) => setBranchForm({ ...branchForm, partnerName: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Branch Manager</span>
-                        <input required value={branchForm.manager} onChange={(e) => setBranchForm({ ...branchForm, manager: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input value={branchForm.manager} onChange={(e) => setBranchForm({ ...branchForm, manager: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                       <label className="block">
                         <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Phone Number</span>
-                        <input required type="tel" value={branchForm.phone} onChange={(e) => setBranchForm({ ...branchForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                        <input type="tel" value={branchForm.phone} onChange={(e) => setBranchForm({ ...branchForm, phone: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                       </label>
                     </div>
                     <label className="block">
                       <span className="text-[10px] uppercase tracking-[0.22em] text-text-secondary">Location / Address Details</span>
-                      <input required value={branchForm.location} onChange={(e) => setBranchForm({ ...branchForm, location: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
+                      <input value={branchForm.location} onChange={(e) => setBranchForm({ ...branchForm, location: e.target.value })} className="mt-1.5 w-full h-10 px-3 rounded-lg border border-border bg-white outline-none focus:border-brand-gold-premium text-sm" />
                     </label>
                   </>
+                )}
+
+                {error && (
+                  <div className="text-[12px] text-red-600 text-center bg-red-50 border border-red-200 rounded-lg py-2 px-3">
+                    {error}
+                  </div>
                 )}
 
                 <button

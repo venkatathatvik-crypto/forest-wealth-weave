@@ -59,6 +59,10 @@ export function PartnerDialog({
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setErr("");
+    if (!form.name.trim() || !form.contactPersonName.trim() || !form.loginEmail.trim() || !form.loginMobile.trim()) {
+      setErr("Partner name, contact person, login email, and login mobile are required");
+      return;
+    }
     create.mutate();
   };
 
@@ -80,7 +84,7 @@ export function PartnerDialog({
             Company
           </div>
           <Field label="Partner Name" full>
-            <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputCls} />
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={inputCls} />
           </Field>
           <Field label="Type">
             <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value as PartnerType })} className={inputCls}>
@@ -118,17 +122,17 @@ export function PartnerDialog({
             Login User
           </div>
           <Field label="Contact Person Name" full>
-            <input required value={form.contactPersonName} onChange={(e) => setForm({ ...form, contactPersonName: e.target.value })} className={inputCls} />
+            <input value={form.contactPersonName} onChange={(e) => setForm({ ...form, contactPersonName: e.target.value })} className={inputCls} />
           </Field>
           <Field label="Login Email">
-            <input required type="email" value={form.loginEmail} onChange={(e) => setForm({ ...form, loginEmail: e.target.value })} className={inputCls} />
+            <input type="email" value={form.loginEmail} onChange={(e) => setForm({ ...form, loginEmail: e.target.value })} className={inputCls} />
           </Field>
           <Field label="Login Mobile">
-            <input required value={form.loginMobile} onChange={(e) => setForm({ ...form, loginMobile: e.target.value })} className={inputCls} />
+            <input value={form.loginMobile} onChange={(e) => setForm({ ...form, loginMobile: e.target.value })} className={inputCls} />
           </Field>
 
           {err && (
-            <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3">{err}</div>
+            <div className="col-span-2 text-[12px] text-red-600 bg-red-50 border border-red-200 rounded-lg py-2 px-3 whitespace-pre-line">{err}</div>
           )}
 
           <div className="col-span-2 flex justify-end gap-2 mt-2">
